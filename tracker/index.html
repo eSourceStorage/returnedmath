@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>returnedmath's basement - Project Progress</title>
+  <link rel="stylesheet" href="static/styles.css">
+  <link rel="stylesheet" href="static/styles-tracker.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Background with moving balls needs to be first in the body -->
+  <div class="background-animation">
+    <div class="ball ball-1"></div>
+    <div class="ball ball-2"></div>
+    <div class="ball ball-3"></div>
+    <div class="ball ball-4"></div>
+    <div class="ball ball-5"></div>
+  </div>
+
+  <!-- Content wrapper to ensure content sits above background -->
+  <div class="content-wrapper">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <h1>returnedmath's basement</h1>
+        </div>
+        <nav class="navbar-menu">
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#" class="active">Progress</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="navbar-actions">
+            <!-- no idea what to put here -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <section class="section">
+        <div class="container progress-container">
+          <div class="section-header">
+            <h2>project progress</h2>
+          </div>
+          
+          <div id="projects-container">
+            <!-- Projects will be loaded here from progress.json -->
+            <div class="loading">
+              <i class="fas fa-spinner fa-spin"></i> Loading projects...
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Fetch project data from progress.json
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/static/progress.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          displayProjects(data);
+        })
+        .catch(error => {
+          console.error('Error fetching progress data:', error);
+          document.getElementById('projects-container').innerHTML = `
+            <div class="project-card">
+              <p>Error loading project data. Please check if /static/progress.json exists and is valid JSON.</p>
+            </div>
+          `;
+        });
+    });
+
+    function displayProjects(data) {
+      const projectsContainer = document.getElementById('projects-container');
+      projectsContainer.innerHTML = '';
+      
+      if (!data.projects || data.projects.length === 0) {
+        projectsContainer.innerHTML = `
+          <div class="project-card">
+            <p>No projects found. Add projects to your progress.json file.</p>
+          </div>
+        `;
+        return;
+      }
+      
+      data.projects.forEach(project => {
+        // Calculate progress percentage
+        const totalTasks = project.tasks ? project.tasks.length : 0;
+        const completedTasks = project.tasks ? project.tasks.filter(task => task.completed).length : 0;
+        const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+        
+        // Create project HTML
+        const projectHtml = `
+          <div class="project-card">
+            <div class="project-header">
+              <div class="project-title">
+                <i class="project-icon ${project.icon || 'fas fa-rocket'}"></i>
+                ${project.name}
+              </div>
+              <div class="project-status status-${project.status.toLowerCase()}">${capitalizeFirstLetter(project.status)}</div>
+            </div>
+            
+            <div class="project-description">${project.description}</div>
+            
+            <div class="project-progress">
+              <div class="progress-info">
+                <div>Progress</div>
+                <div>${progressPercentage}%</div>
+              </div>
+              <div class="progress-bar-container">
+                <div class="progress-bar" style="width: ${progressPercentage}%"></div>
+              </div>
+            </div>
+            
+            ${project.tasks && project.tasks.length > 0 ? `
+              <div class="project-tasks">
+                ${project.tasks.map(task => `
+                  <div class="task-item">
+                    <div class="task-status ${task.completed ? 'completed' : ''}">
+                      <i class="fas ${task.completed ? 'fa-check-circle' : 'fa-circle'}"></i>
+                    </div>
+                    <div class="task-name ${task.completed ? 'completed-task' : ''}">${task.name}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+            
+            <div class="project-meta">
+              ${project.startDate ? `
+                <div class="meta-item">
+                  <i class="meta-icon fas fa-calendar-alt"></i> Started: ${formatDate(project.startDate)}
+                </div>
+              ` : ''}
+              
+              ${project.dueDate ? `
+                <div class="meta-item">
+                  <i class="meta-icon fas fa-calendar-check"></i> Due: ${formatDate(project.dueDate)}
+                </div>
+              ` : ''}
+              
+              ${project.owner ? `
+                <div class="meta-item">
+                  <i class="meta-icon fas fa-user"></i> Owner: ${project.owner}
+                </div>
+              ` : ''}
+            </div>
+            
+            ${project.updates && project.updates.length > 0 ? `
+              <div class="project-updates">
+                <h4 style="margin-top: 1.5rem;">Recent Updates</h4>
+                ${project.updates.map(update => `
+                  <div class="update-item">
+                    <div class="update-date">${formatDate(update.date)}</div>
+                    <div class="update-content">${update.content}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `;
+        
+        projectsContainer.innerHTML += projectHtml;
+      });
+    }
+    
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+    
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'short', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+  </script>
+</body>
+</html>
