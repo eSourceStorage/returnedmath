@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>returnedmath's basement</title>
+  <link rel="stylesheet" href="static/styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+  <!-- Background with moving balls needs to be first in the body -->
+  <div class="background-animation">
+    <div class="ball ball-1"></div>
+    <div class="ball ball-2"></div>
+    <div class="ball ball-3"></div>
+    <div class="ball ball-4"></div>
+    <div class="ball ball-5"></div>
+  </div>
+
+  <!-- Content wrapper to ensure content sits above background -->
+  <div class="content-wrapper">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <h1>returnedmath's basement</h1>
+        </div>
+        <nav class="navbar-menu">
+          <ul>
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="/tracker">Progress</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="navbar-actions">
+            <!-- no idea what to put here -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2>thingies i made</h2>
+          </div>
+
+          <div class="card-grid">
+            <!-- Card 1 -->
+            <div class="card">
+              <div class="card-top">
+                <div class="card-icon"><i class="fas fa-rocket"></i></div>
+                <h3>Tablet Ordering System</h3>
+                <p>very gud addon for ezpos cafepos, download now free i said!!!!!11</p>
+              </div>
+              <div class="card-bottom">
+                <button class="btn-glass">Download</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie</p>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Add smooth scrolling for links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  </script>
+</body>
+</html>
