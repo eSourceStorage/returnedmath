@@ -1,0 +1,183 @@
+    .progress-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    .project-card {
+      background: rgba(30, 30, 50, 0.7);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    
+    .project-title {
+      font-weight: 700;
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+    }
+    
+    .project-icon {
+      margin-right: 10px;
+      color: #6C7BFF;
+    }
+    
+    .project-status {
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+    
+    .status-active {
+      background: rgba(75, 222, 151, 0.15);
+      color: #4BDE97;
+    }
+    
+    .status-planning {
+      background: rgba(108, 123, 255, 0.15);
+      color: #6C7BFF;
+    }
+    
+    .status-completed {
+      background: rgba(161, 161, 170, 0.15);
+      color: #A1A1AA;
+    }
+    
+    .status-paused {
+      background: rgba(255, 204, 0, 0.15);
+      color: #FFCC00;
+    }
+    
+    .project-progress {
+      margin-bottom: 1.5rem;
+    }
+    
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .progress-bar-container {
+      width: 100%;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    
+    .progress-bar {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #6C7BFF, #4BDE97);
+    }
+    
+    .project-tasks {
+      margin-top: 1.5rem;
+    }
+    
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    
+    .task-item:last-child {
+      border-bottom: none;
+    }
+    
+    .task-status {
+      margin-right: 12px;
+      color: #A1A1AA;
+    }
+    
+    .task-status.completed {
+      color: #4BDE97;
+    }
+    
+    .task-name {
+      flex-grow: 1;
+    }
+    
+    .completed-task {
+      text-decoration: line-through;
+      color: rgba(255, 255, 255, 0.5);
+    }
+    
+    .project-description {
+      color: rgba(255, 255, 255, 0.7);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    
+    .project-meta {
+      display: flex;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      align-items: center;
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 0.875rem;
+    }
+    
+    .meta-icon {
+      margin-right: 6px;
+      color: #6C7BFF;
+    }
+    
+    .update-item {
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+      position: relative;
+    }
+    
+    .update-item::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 0;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #6C7BFF;
+    }
+    
+    .update-item::after {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: 5px;
+      width: 1px;
+      height: calc(100% - 6px);
+      background: rgba(108, 123, 255, 0.3);
+    }
+    
+    .update-item:last-child::after {
+      display: none;
+    }
+    
+    .update-date {
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-bottom: 0.25rem;
+    }
+    
+    .update-content {
+      color: rgba(255, 255, 255, 0.8);
+    }
