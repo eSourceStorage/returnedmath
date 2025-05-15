@@ -1,0 +1,7 @@
+name = "returnedmath"
+compatibility_date = "2024-05-14"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "returnedmath"
+database_id = "a92c27c6-61fb-416e-85c0-32ba458cbcaf"
