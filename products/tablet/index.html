@@ -696,42 +696,465 @@
   <div class="toast" id="toast"></div>
 </body>
 <script>
-document.addEventListener("DOMContentLoaded", async () => {
-  const WORKER_URL = "https://product-stats-worker.ilovebacon590.workers.dev"; // <--- PUT YOUR WORKER URL HERE
-  const productId = "1";
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the product ID from URL or set a default
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('product_id') || 'tablet-ordering-system'; // Default if not specified
 
-  const likeBtn = document.getElementById("like-btn");
-  const dislikeBtn = document.getElementById("dislike-btn");
-  const likeCount = document.getElementById("like-count");
-  const dislikeCount = document.getElementById("dislike-count");
+  // Elements
+  const likeBtn = document.getElementById('likeBtn');
+  const dislikeBtn = document.getElementById('dislikeBtn');
+  const likeCount = document.getElementById('likeCount');
+  const dislikeCount = document.getElementById('dislikeCount');
+  const commentForm = document.getElementById('commentForm');
+  const commentInput = document.getElementById('commentInput');
+  const commentList = document.querySelector('.comment-list');
+  const toast = document.getElementById('toast');
 
-  async function updateStats() {
-    try {
-      const res = await fetch(`${WORKER_URL}/stats?product_id=${encodeURIComponent(productId)}`);
-      const data = await res.json();
-      likeCount.textContent = data.likes ?? 0;
-      dislikeCount.textContent = data.dislikes ?? 0;
-    } catch (err) {
-      console.error("Failed to fetch stats:", err);
-    }
-  }
+  // State tracking
+  let userInteraction = {
+    hasLiked: false,
+    hasDisliked: false
+  };
 
-  async function sendAction(action) {
-    try {
-      await fetch(`${WORKER_URL}/likes`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product_id: productId, action })
+  // Load interaction state from localStorage if available
+  loadUserInteractionState();
+  
+  // Initialize - fetch current stats and comments
+  fetchStats();
+  fetchComments();
+
+  // Event listeners
+  likeBtn.addEventListener('click', handleLike);
+  dislikeBtn.addEventListener('click', handleDislike);
+  commentForm.addEventListener('submit', handleCommentSubmit);
+
+  // Functions
+  function fetchStats() {
+    fetch(`https://product-stats-worker.ilovebacon590.workers.dev/stats?product_id=${productId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Try to parse as JSON, if it fails, handle gracefully
+        return response.json().catch(() => ({ likes: 0, dislikes: 0 }));
+      })
+      .then(data => {
+        // Update the UI with the fetched stats
+        likeCount.textContent = data.likes || 0;
+        dislikeCount.textContent = data.dislikes || 0;
+        
+        // Update button states based on user's previous interactions
+        updateButtonStates();
+      })
+      .catch(error => {
+        console.error('Error fetching stats:', error);
+        // Don't show toast for stat errors, just use whatever is in the HTML
       });
-      await updateStats();
-    } catch (err) {
-      console.error("Failed to send action:", err);
+  }
+
+  function fetchComments() {
+    fetch(`https://product-stats-worker.ilovebacon590.workers.dev/comments?product_id=${productId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Try to parse as JSON, if it fails, handle as empty array
+        return response.json().catch(() => []);
+      })
+      .then(comments => {
+        // Clear existing comments
+        commentList.innerHTML = '';
+        
+        // Add each comment to the list
+        if (!comments || comments.length === 0) {
+          commentList.innerHTML = '<p class="comment-item">No comments yet. Be the first to comment!</p>';
+        } else {
+          // Sort comments newest first if they have a date
+          comments.sort((a, b) => {
+            if (!a.date) return 1;
+            if (!b.date) return -1;
+            return new Date(b.date) - new Date(a.date);
+          });
+          
+          comments.forEach(comment => {
+            addCommentToUI(comment);
+          });
+        }
+      })
+      .catch(error => {
+        showToast(`Error fetching comments: ${error.message}`);
+        console.error('Error fetching comments:', error);
+      });
+  }
+
+  function handleLike() {
+    if (userInteraction.hasLiked) {
+      // Unlike - user already liked and is clicking again
+      unlikeProduct();
+    } else {
+      // Like the product
+      if (userInteraction.hasDisliked) {
+        // If they previously disliked, remove dislike first
+        undislikeProduct();
+      }
+      likeProduct();
     }
   }
 
-  likeBtn?.addEventListener("click", () => sendAction("like"));
-  dislikeBtn?.addEventListener("click", () => sendAction("dislike"));
+  function handleDislike() {
+    if (userInteraction.hasDisliked) {
+      // Undislike - user already disliked and is clicking again
+      undislikeProduct();
+    } else {
+      // Dislike the product
+      if (userInteraction.hasLiked) {
+        // If they previously liked, remove like first
+        unlikeProduct();
+      }
+      dislikeProduct();
+    }
+  }
 
-  await updateStats();
+  function likeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'like'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasLiked = true;
+      if (data.likes !== undefined) {
+        likeCount.textContent = data.likes;
+      } else {
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Thanks for liking!');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasLiked = true;
+      likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error liking product:', error);
+    });
+  }
+
+  function unlikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'unlike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasLiked = false;
+      if (data.likes !== undefined) {
+        likeCount.textContent = data.likes;
+      } else {
+        likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Like removed');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasLiked = false;
+      likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error unliking product:', error);
+    });
+  }
+
+  function dislikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'dislike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasDisliked = true;
+      if (data.dislikes !== undefined) {
+        dislikeCount.textContent = data.dislikes;
+      } else {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Feedback recorded');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasDisliked = true;
+      dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error disliking product:', error);
+    });
+  }
+
+  function undislikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'undislike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasDisliked = false;
+      if (data.dislikes !== undefined) {
+        dislikeCount.textContent = data.dislikes;
+      } else {
+        dislikeCount.textContent = Math.max(0, parseInt(dislikeCount.textContent) - 1);
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Dislike removed');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasDisliked = false;
+      dislikeCount.textContent = Math.max(0, parseInt(dislikeCount.textContent) - 1);
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error removing dislike:', error);
+    });
+  }
+
+  function handleCommentSubmit(event) {
+    event.preventDefault();
+    
+    const commentText = commentInput.value.trim();
+    if (!commentText) {
+      showToast('Please enter a comment');
+      return;
+    }
+    
+    submitComment(commentText);
+  }
+
+  function submitComment(content) {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        content: content
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Clone the response before trying to parse as JSON
+      // This allows us to fall back to text() if JSON parsing fails
+      const responseClone = response.clone();
+      
+      return response.json()
+        .catch(() => {
+          // If JSON parsing fails, try to get the text instead
+          return responseClone.text()
+            .then(textData => {
+              // Try to parse the text as JSON, or return a simple success object
+              try {
+                return JSON.parse(textData);
+              } catch (e) {
+                return { success: true };
+              }
+            });
+        });
+    })
+    .then(data => {
+      // Clear the input field
+      commentInput.value = '';
+      
+      // Create a new comment object if we didn't get one from the API
+      const newComment = typeof data === 'object' ? data : {
+        id: Date.now().toString(), // Generate a temporary ID
+        content: content,
+        username: 'You',
+        date: new Date().toISOString()
+      };
+      
+      // Add the new comment to the UI
+      addCommentToUI(newComment);
+      
+      showToast('Comment posted successfully!');
+      
+      // Optionally, refresh all comments to ensure we have the latest data
+      setTimeout(fetchComments, 1000);
+    })
+    .catch(error => {
+      showToast(`Error posting comment: ${error.message}`);
+      console.error('Error posting comment:', error);
+      
+      // Even if there's an error with the server, add the comment to the UI
+      // so the user doesn't lose their input
+      const fallbackComment = {
+        id: Date.now().toString(),
+        content: content,
+        username: 'You (Pending)',
+        date: new Date().toISOString()
+      };
+      
+      addCommentToUI(fallbackComment);
+    });
+  }
+
+  function addCommentToUI(comment) {
+    // Remove any "no comments" message if it exists
+    const noCommentsMsg = commentList.querySelector('p');
+    if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
+      noCommentsMsg.remove();
+    }
+    
+    // Create comment element
+    const commentItem = document.createElement('li');
+    commentItem.className = 'comment-item';
+    commentItem.setAttribute('data-comment-id', comment.id);
+    
+    // Format date (assuming comment.date is an ISO string or timestamp)
+    let commentDate;
+    try {
+      commentDate = comment.date ? new Date(comment.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) : 'Just now';
+    } catch(e) {
+      commentDate = 'Recently';
+    }
+    
+    // Build comment HTML
+    commentItem.innerHTML = `
+      <div class="comment-header">
+        <div class="commenter">${'someone'}</div>
+        <div class="comment-time">${commentDate}</div>
+      </div>
+      <div class="comment-content">${escapeHTML(comment.content)}</div>
+      <div class="comment-actions">
+        <span class="comment-action">
+          <i class="fas fa-thumbs-up"></i> Like
+        </span>
+        <span class="comment-action">Reply</span>
+      </div>
+    `;
+    
+    // Add to the list (at the beginning for newest first)
+    commentList.insertBefore(commentItem, commentList.firstChild);
+  }
+
+  function updateButtonStates() {
+    // Update like button
+    if (userInteraction.hasLiked) {
+      likeBtn.classList.add('liked');
+    } else {
+      likeBtn.classList.remove('liked');
+    }
+    
+    // Update dislike button
+    if (userInteraction.hasDisliked) {
+      dislikeBtn.classList.add('disliked');
+    } else {
+      dislikeBtn.classList.remove('disliked');
+    }
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  function saveUserInteractionState() {
+    localStorage.setItem(`product_${productId}_interaction`, JSON.stringify(userInteraction));
+  }
+
+  function loadUserInteractionState() {
+    const savedState = localStorage.getItem(`product_${productId}_interaction`);
+    if (savedState) {
+      try {
+        userInteraction = JSON.parse(savedState);
+      } catch (e) {
+        console.error('Error parsing saved interaction state', e);
+        userInteraction = { hasLiked: false, hasDisliked: false };
+      }
+    }
+  }
+
+  // Helper function to escape HTML and prevent XSS
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  // Function to download product (example implementation)
+  window.downloadProduct = function() {
+    showToast('temporary unavailable');
+  };
 });
 </script>
