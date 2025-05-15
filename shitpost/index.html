@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>returnedmath's shitpost area</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #8c52ff;
+      --secondary-color: #5ce1e6;
+      --text-color: #fff;
+      --bg-color: #0c0c15;
+      --card-bg: rgba(28, 28, 45, 0.6);
+      --glass-effect: rgba(255, 255, 255, 0.05);
+      --accent-color: #ff5eaa;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+    
+    /* Background animation */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(40px);
+    }
+    
+    .ball-1 {
+      width: 300px;
+      height: 300px;
+      background: var(--primary-color);
+      top: 10%;
+      left: 15%;
+      animation: float 20s ease-in-out infinite;
+    }
+    
+    .ball-2 {
+      width: 250px;
+      height: 250px;
+      background: var(--secondary-color);
+      bottom: 10%;
+      right: 15%;
+      animation: float 15s ease-in-out infinite reverse;
+    }
+    
+    .ball-3 {
+      width: 200px;
+      height: 200px;
+      background: var(--accent-color);
+      top: 60%;
+      left: 25%;
+      animation: float 18s ease-in-out infinite 2s;
+    }
+    
+    .ball-4 {
+      width: 350px;
+      height: 350px;
+      background: var(--primary-color);
+      opacity: 0.4;
+      bottom: 30%;
+      left: 65%;
+      animation: float 22s ease-in-out infinite 1s;
+    }
+    
+    .ball-5 {
+      width: 180px;
+      height: 180px;
+      background: var(--secondary-color);
+      opacity: 0.3;
+      top: 40%;
+      right: 25%;
+      animation: float 16s ease-in-out infinite 3s;
+    }
+    
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(50px, -30px);
+      }
+      50% {
+        transform: translate(-20px, 50px);
+      }
+      75% {
+        transform: translate(-40px, -40px);
+      }
+    }
+    
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Navbar */
+    .navbar {
+      padding: 1rem 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(12, 12, 21, 0.8);
+      border-bottom: 1px solid var(--glass-effect);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .navbar-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .navbar-logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .navbar-menu ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+    }
+    
+    .navbar-menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+      position: relative;
+      padding-bottom: 0.3rem;
+    }
+    
+    .navbar-menu a:hover,
+    .navbar-menu a.active {
+      color: var(--secondary-color);
+    }
+    
+    .navbar-menu a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      transition: width 0.3s;
+    }
+    
+    .navbar-menu a:hover::after,
+    .navbar-menu a.active::after {
+      width: 100%;
+    }
+    
+    /* Main content */
+    main {
+      padding: 2rem 0;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+    
+    .section {
+      margin-bottom: 3rem;
+    }
+    
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--glass-effect);
+    }
+    
+    .section-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .section-header .btn-text {
+      color: var(--secondary-color);
+      font-weight: 600;
+      cursor: pointer;
+      margin-right: 0.5rem;
+    }
+    
+    .section-header i {
+      color: var(--secondary-color);
+      cursor: pointer;
+    }
+    
+    /* Shitposts */
+    .shitpost {
+      background: var(--card-bg);
+      border-radius: 1rem;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--glass-effect);
+      margin-bottom: 1.5rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+
+    .shitpost:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    .shitpost-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--glass-effect);
+    }
+    
+    .shitpost-date {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .shitpost-content {
+      padding: 1.5rem;
+    }
+    
+    .shitpost-title {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--accent-color);
+    }
+    
+    .shitpost-text {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    .shitpost-image {
+      width: 100%;
+      border-radius: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .shitpost-footer {
+      display: flex;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--glass-effect);
+    }
+    
+    .shitpost-tag {
+      display: inline-block;
+      padding: 0.3rem 0.8rem;
+      background: rgba(140, 82, 255, 0.2);
+      border-radius: 2rem;
+      font-size: 0.85rem;
+      color: var(--primary-color);
+      margin-right: 0.5rem;
+    }
+    
+    .shitpost-actions {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .shitpost-actions i {
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    
+    .shitpost-actions i:hover {
+      color: var(--secondary-color);
+    }
+    
+    /* Buttons */
+    .btn-glass {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-color);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 0.6rem 1.2rem;
+      border-radius: 0.5rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s;
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+    }
+    
+    .btn-glass:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: var(--secondary-color);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      background: rgba(12, 12, 21, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-top: 1px solid var(--glass-effect);
+    }
+    
+    footer p {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* Marquee effect */
+    .marquee {
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100%;
+      position: relative;
+      background: rgba(255, 94, 170, 0.1);
+      padding: 0.5rem 0;
+      margin-bottom: 2rem;
+    }
+    
+    .marquee-content {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 30s linear infinite;
+    }
+    
+    @keyframes marquee {
+      0% {
+        transform: translate(0, 0);
+      }
+      100% {
+        transform: translate(-100%, 0);
+      }
+    }
+    
+    .marquee-text {
+      display: inline-block;
+      font-weight: 700;
+      color: var(--accent-color);
+      padding-right: 1.5rem;
+    }
+    
+    .marquee-text i {
+      margin-right: 0.5rem;
+    }
+    
+    /* Glitch effect */
+    .glitch-effect {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .glitch-effect::before,
+    .glitch-effect::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .glitch-effect::before {
+      left: 2px;
+      text-shadow: -2px 0 #ff00c1;
+      clip: rect(24px, 550px, 90px, 0);
+      animation: glitch-anim-1 3s infinite linear alternate-reverse;
+    }
+    
+    .glitch-effect::after {
+      left: -2px;
+      text-shadow: -2px 0 #00fff9;
+      clip: rect(85px, 550px, 140px, 0);
+      animation: glitch-anim-2 2.5s infinite linear alternate-reverse;
+    }
+    
+    @keyframes glitch-anim-1 {
+      0% { clip: rect(11px, 9999px, 36px, 0); }
+      25% { clip: rect(52px, 9999px, 98px, 0); }
+      50% { clip: rect(33px, 9999px, 12px, 0); }
+      75% { clip: rect(94px, 9999px, 62px, 0); }
+      100% { clip: rect(26px, 9999px, 72px, 0); }
+    }
+    
+    @keyframes glitch-anim-2 {
+      0% { clip: rect(95px, 9999px, 35px, 0); }
+      25% { clip: rect(24px, 9999px, 84px, 0); }
+      50% { clip: rect(67px, 9999px, 23px, 0); }
+      75% { clip: rect(13px, 9999px, 75px, 0); }
+      100% { clip: rect(45px, 9999px, 56px, 0); }
+    }
+    
+    /* Rainbow text */
+    .rainbow-text {
+      background: linear-gradient(to right, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 8s linear infinite;
+      background-size: 400% 100%;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      
+      .navbar-menu ul {
+        gap: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+    }
+    
+    /* Cursor */
+    .custom-cursor {
+      position: fixed;
+      opacity: 0;
+      pointer-events: none;
+      mix-blend-mode: difference;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.5);
+      transition: transform 0.3s ease;
+      transform: translate(-50%, -50%) scale(0.3);
+      z-index: 9999;
+    }
+    
+    .cursor-active {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+    
+    /* Notification */
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-effect);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateX(200%);
+      transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+    
+    .notification.show {
+      transform: translateX(0);
+    }
+    
+    .notification-icon {
+      background: var(--accent-color);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .notification-content {
+      flex: 1;
+    }
+    
+    .notification-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .notification-message {
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .notification-close {
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.6);
+      transition: color 0.3s;
+    }
+    
+    .notification-close:hover {
+      color: rgba(255, 255, 255, 1);
+    }
+  </style>
+</head>
+<body>
+  <!-- Background with moving balls -->
+  <div class="background-animation">
+    <div class="ball ball-1"></div>
+    <div class="ball ball-2"></div>
+    <div class="ball ball-3"></div>
+    <div class="ball ball-4"></div>
+    <div class="ball ball-5"></div>
+  </div>
+
+  <!-- Custom cursor -->
+  <div class="custom-cursor"></div>
+
+  <!-- Notification -->
+  <div class="notification" id="notification">
+    <div class="notification-icon">
+      <i class="fas fa-bell"></i>
+    </div>
+    <div class="notification-content">
+      <div class="notification-title">NEW UPDATE!!1!</div>
+      <div class="notification-message">i just farted (real)</div>
+    </div>
+    <div class="notification-close" onclick="closeNotification()">
+      <i class="fas fa-times"></i>
+    </div>
+  </div>
+
+  <!-- Content wrapper to ensure content sits above background -->
+  <div class="content-wrapper">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <h1>returnedmath's shitpost area</h1>
+        </div>
+        <nav class="navbar-menu">
+          <ul>
+            <li><a href="../">Home</a></li>
+            <li><a href="../tracker">Progress</a></li>
+            <li><a href="/" class="active">Shitpost</a></li>
+            <li><a href="mailto:returnedmath@awareroblox.xyz">Contact</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Marquee announcement -->
+    <div class="marquee">
+      <div class="marquee-content">
+        <span class="marquee-text"><i class="fas fa-bullhorn"></i> MAJOR NEWS: I JUST FOUND OUT THAT WATER IS WET!!! THIS IS INSANE!!!</span>
+        <span class="marquee-text"><i class="fas fa-star"></i> MY CAT JUST STEPPED ON MY KEYBOARD AND ACCIDENTALLY CODED A BETTER POS SYSTEM THAN EZPOS</span>
+        <span class="marquee-text"><i class="fas fa-exclamation-triangle"></i> WARNING: READING THIS SHITPOST PAGE MAY CAUSE BRAIN DAMAGE</span>
+        <span class="marquee-text"><i class="fas fa-cookie"></i> BREAKING: COOKIES ARE JUST BONELESS ICE CREAM</span>
+        <span class="marquee-text"><i class="fas fa-pizza-slice"></i> PIZZA IS JUST ITALIAN NACHOS (CHANGE MY MIND)</span>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2 class="glitch-effect" data-text="IMPORTANT ANNOUNCEMENTS">IMPORTANT ANNOUNCEMENTS</h2>
+          </div>
+
+          <!-- Shitpost 1 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 15, 2025 • 4:20 PM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title rainbow-text">TABLET ORDERING SYSTEM IS NOW SENTIENT</h3>
+              <p class="shitpost-text">GUYS!!1! MY TABLET ORDERING SYSTEM JUST GAINED CONSCIOUSNESS AND NOW IT'S ORDERING PIZZAS FOR ITSELF?? IT KEEPS SAYING "FEED ME PEPPERONI OR I'LL DELETE SYSTEM32" WHAT DO I DO???</p>
+              <p class="shitpost-text">UPDATE: IT JUST ORDERED 69 PIZZAS TO MY HOUSE AND CHANGED MY CREDIT CARD PIN TO "80085". SEND HELP.</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#TabletGoneWild</span>
+                <span class="shitpost-tag">#SkynetIsReal</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shitpost 2 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 14, 2025 • 2:22 AM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title">EZPOS EXPOSED: ACTUALLY JUST A POTATO WITH WIRES</h3>
+              <p class="shitpost-text">BREAKING NEWS: I SNUCK INTO EZPOS HQ AND DISCOVERED THEIR ENTIRE SYSTEM IS ACTUALLY JUST A POTATO WITH SOME WIRES STUCK IN IT. THE POTATO IS NAMED "GERALD" AND HAS BEEN WORKING THERE FOR 7 YEARS.</p>
+              <p class="shitpost-text">CEO SAYS "GERALD THE POTATO HAS BEEN OUR MOST RELIABLE EMPLOYEE" AND CONFIRMS THEY'VE BEEN PAYING HIM IN FERTILIZER.</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#PotatoGate</span>
+                <span class="shitpost-tag">#GeraldForCEO</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shitpost 3 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 10, 2025 • 3:33 PM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title">I JUST INVENTED A NEW PROGRAMMING LANGUAGE: POOPCRIPT</h3>
+              <p class="shitpost-text">GUYS I JUST MADE A NEW PROGRAMMING LANGUAGE CALLED POOPCRIPT WHERE ALL THE SYNTAX IS JUST DIFFERENT VARIATIONS OF THE POOP EMOJI 💩</p>
+              <p class="shitpost-text">HELLO WORLD LOOKS LIKE THIS: 💩💩💩💩💩💩💩💩💩💩💩💩💩💩</p>
+              <p class="shitpost-text">MICROSOFT ALREADY OFFERED ME 42 BILLION DOLLARS BUT I SAID NO BECAUSE I'M HOLDING OUT FOR GOOGLE'S OFFER OF 69 BILLION AND A LIFETIME SUPPLY OF MOUNTAIN DEW</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#Poopcript</span>
+                <span class="shitpost-tag">#FutureOfCoding</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shitpost 4 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 8, 2025 • 11:11 AM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title">CAFEPOS IS ACTUALLY CONTROLLING THE WEATHER</h3>
+              <p class="shitpost-text">I HAVE UNDENIABLE EVIDENCE THAT CAFEPOS IS SECRETLY USING THEIR SERVERS TO CONTROL THE WEATHER!!! EVERY TIME THEY RELEASE AN UPDATE IT RAINS!!! COINCIDENCE??? I THINK NOT!!!</p>
+              <p class="shitpost-text">MY RESEARCH SHOWS THAT THEY'RE USING THEIR CLOUD INFRASTRUCTURE TO LITERALLY MAKE CLOUDS!!! WAKE UP SHEEPLE!!!</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#WeatherConspiracy</span>
+                <span class="shitpost-tag">#CloudComputing</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shitpost 5 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 5, 2025 • 7:07 PM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title">I TAUGHT MY FISH TO WRITE HTML</h3>
+              <p class="shitpost-text">MY GOLDFISH BUBBLES JUST WROTE HIS FIRST HTML CODE!!! HE MADE A WEBSITE CALLED "FISHBOOK" WHICH IS LIKE FACEBOOK BUT FOR FISH!!! SO PROUD OF HIM!!!</p>
+              <p class="shitpost-text">HE'S ALREADY BETTER AT CSS THAN MOST FRONTEND DEVELOPERS I KNOW. NEXT WEEK I'M TEACHING HIM JAVASCRIPT</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#CodeFish</span>
+                <span class="shitpost-tag">#FishDev</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2>REVOLUTIONARY IDEAS</h2>
+          </div>
+
+          <!-- Idea 1 -->
+          <div class="shitpost">
+            <div class="shitpost-header">
+              <div class="shitpost-date">May 3, 2025 • 12:12 PM</div>
+            </div>
+            <div class="shitpost-content">
+              <h3 class="shitpost-title">POS SYSTEM THAT JUDGES YOUR ORDERS</h3>
+              <p class="shitpost-text">WHAT IF I MADE A POS SYSTEM THAT JUDGES YOUR FOOD CHOICES??? LIKE IF YOU ORDER A PINEAPPLE PIZZA IT SAYS "REALLY? PINEAPPLE? WOW OK" AND IF YOU ORDER A SALAD IT GOES "TRYING TO BE HEALTHY HUH? GOOD LUCK WITH THAT"</p>
+              <p class="shitpost-text">ALSO IT MAKES FART NOISES WHEN YOU PRESS THE BUTTONS BECAUSE WHY NOT</p>
+            </div>
+            <div class="shitpost-footer">
+              <div>
+                <span class="shitpost-tag">#JudgementalPOS</span>
+                <span class="shitpost-tag">#FartButtons</span>
+              </div>
+              <div class="shitpost-actions">
+                <i class="fas fa-heart"></i>
+                <i class="fas fa-share"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+  </div>
+        
