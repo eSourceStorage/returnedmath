@@ -3,7 +3,7 @@
     {
       "name": "Tablet Ordering System",
       "icon": "fas fa-tablet",
-      "description": "A tablet for CafePOS, allowing staff to take orders directly from the customer's table.",
+      "description": "A tablet for CafePOS, allowing staff to take orders directly from the customers table.",
       "status": "planning",
       "startDate": "2025-01-15",
       "dueDate": "2025-05-20",
@@ -12,14 +12,14 @@
         { "name": "New UI development", "completed": true },
         { "name": "HR Settings", "completed": true },
         { "name": "Bug fixes", "completed": true },
-        { "name": "Testing", "completed": false }
+        { "name": "Testing", "completed": true }
       ],
       "updates": [
         { "date": "2025-05-14", "content": "Everything completed. Yes." },
         { "date": "2025-05-14", "content": "Testing Started" },
         { "date": "2025-05-14", "content": "Bug fixes development started" },
         { "date": "2025-05-14", "content": "Testing still not completed - waiting on labs." }
-        
+        { "date": "2025-05-27", "content": "new update - fuck labs, you can now download" }
       ]
     }
   ]
