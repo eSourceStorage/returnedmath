@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>returnedmath's basement - Products</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6e57e0;
+      --secondary-color: #ff7f50;
+      --background-color: #050814;
+      --card-bg-color: rgba(30, 41, 59, 0.7);
+      --text-color: #f8fafc;
+      --border-radius: 12px;
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      position: relative;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background Animation */
+    .background-animation {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    .ball-1 {
+      width: 300px;
+      height: 300px;
+      background: rgba(110, 87, 224, 0.4);
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .ball-2 {
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 127, 80, 0.4);
+      bottom: 10%;
+      right: 15%;
+      animation-delay: -5s;
+    }
+
+    .ball-3 {
+      width: 250px;
+      height: 250px;
+      background: rgba(80, 200, 255, 0.3);
+      bottom: 30%;
+      left: 20%;
+      animation-delay: -2s;
+    }
+
+    .ball-4 {
+      width: 180px;
+      height: 180px;
+      background: rgba(255, 105, 180, 0.3);
+      top: 20%;
+      right: 10%;
+      animation-delay: -7s;
+    }
+
+    .ball-5 {
+      width: 220px;
+      height: 220px;
+      background: rgba(50, 205, 50, 0.3);
+      top: 50%;
+      left: 50%;
+      animation-delay: -3s;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      25% {
+        transform: translate(-40px, 40px);
+      }
+      50% {
+        transform: translate(40px, -40px);
+      }
+      75% {
+        transform: translate(40px, 40px);
+      }
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    .navbar {
+      padding: 1rem 0;
+      background: rgba(5, 8, 20, 0.8);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .navbar-container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-color);
+    }
+
+    .navbar-menu ul {
+      display: flex;
+      list-style: none;
+    }
+
+    .navbar-menu li {
+      margin: 0 1rem;
+    }
+
+    .navbar-menu a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+      padding: 0.5rem 0;
+      position: relative;
+    }
+
+    .navbar-menu a:hover, .navbar-menu a.active {
+      color: var(--primary-color);
+    }
+
+    .navbar-menu a.active:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--primary-color);
+    }
+
+    /* Container */
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 0;
+    }
+
+    /* Section */
+    .section {
+      margin: 2rem 0;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .section-header h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--text-color);
+      position: relative;
+    }
+
+    .btn-text {
+      color: var(--primary-color);
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .btn-text:hover {
+      opacity: 0.8;
+    }
+
+    .fa-arrow-right {
+      transition: var(--transition);
+      cursor: pointer;
+    }
+
+    .btn-text:hover + .fa-arrow-right,
+    .fa-arrow-right:hover {
+      transform: translateX(5px);
+      color: var(--primary-color);
+    }
+
+    /* Product Detail Card */
+    .product-detail {
+      background: var(--card-bg-color);
+      border-radius: var(--border-radius);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transition: var(--transition);
+      margin-bottom: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .product-detail:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .product-content {
+      padding: 2rem;
+    }
+
+    .product-header {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(110, 87, 224, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .product-title {
+      flex: 1;
+    }
+
+    .product-title h3 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .product-description {
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .product-media {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      background: rgba(0, 0, 0, 0.3);
+      height: 300px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Actions */
+    .product-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .action-group {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+    }
+
+    .action-btn:hover {
+      color: var(--primary-color);
+    }
+
+    .action-btn.liked {
+      color: #4CAF50;
+    }
+
+    .action-btn.disliked {
+      color: #F44336;
+    }
+
+    .btn-glass {
+      background: rgba(110, 87, 224, 0.2);
+      border: 1px solid rgba(110, 87, 224, 0.3);
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      color: var(--text-color);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .btn-glass:hover {
+      background: rgba(110, 87, 224, 0.3);
+      transform: translateY(-2px);
+    }
+
+    /* Comments Section */
+    .comments-section {
+      margin-top: 2rem;
+    }
+
+    .comments-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .comment-form {
+      display: flex;
+      margin-bottom: 2rem;
+    }
+
+    .comment-input {
+      flex: 1;
+      padding: 1rem;
+      border-radius: var(--border-radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(30, 41, 59, 0.5);
+      color: var(--text-color);
+      resize: none;
+    }
+
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .comment-submit {
+      margin-left: 1rem;
+      padding: 0 1.5rem;
+      border-radius: var(--border-radius);
+      border: none;
+      background: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .comment-submit:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .comment-list {
+      list-style: none;
+    }
+
+    .comment-item {
+      padding: 1.5rem;
+      background: rgba(30, 41, 59, 0.3);
+      border-radius: var(--border-radius);
+      margin-bottom: 1rem;
+    }
+
+    .comment-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+
+    .commenter {
+      font-weight: 600;
+    }
+
+    .comment-time {
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .comment-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .comment-action {
+      font-size: 0.85rem;
+      color: var(--text-color);
+      opacity: 0.7;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .comment-action:hover {
+      color: var(--primary-color);
+      opacity: 1;
+    }
+
+    /* Related Products */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: var(--card-bg-color);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      transition: var(--transition);
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-top {
+      padding: 2rem;
+      flex: 1;
+    }
+
+    .card-icon {
+      width: 50px;
+      height: 50px;
+      background: rgba(110, 87, 224, 0.2);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+
+    .card h3 {
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      opacity: 0.9;
+      font-size: 0.95rem;
+    }
+
+    .card-bottom {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-stats {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      opacity: 0.7;
+    }
+
+    .stat {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Footer */
+    footer {
+      background: rgba(5, 8, 20, 0.8);
+      padding: 2rem 0;
+      margin-top: 4rem;
+      text-align: center;
+    }
+
+    footer p {
+      opacity: 0.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .navbar-menu {
+        display: none;
+      }
+
+      .product-header {
+        flex-direction: column;
+      }
+
+      .product-icon {
+        margin-bottom: 1rem;
+      }
+
+      .product-actions {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+      }
+
+      .comment-form {
+        flex-direction: column;
+      }
+
+      .comment-submit {
+        margin-left: 0;
+        margin-top: 1rem;
+        width: 100%;
+        padding: 0.75rem;
+      }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background with moving balls -->
+  <div class="background-animation">
+    <div class="ball ball-1"></div>
+    <div class="ball ball-2"></div>
+    <div class="ball ball-3"></div>
+    <div class="ball ball-4"></div>
+    <div class="ball ball-5"></div>
+  </div>
+
+  <!-- Content wrapper -->
+  <div class="content-wrapper">
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+      <div class="navbar-container">
+        <div class="navbar-logo">
+          <h1>returnedmath's basement</h1>
+        </div>
+        <nav class="navbar-menu">
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/products" class="active">Products</a></li>
+            <li><a href="../../../tracker">Progress</a></li>
+            <li><a href="../../../shitpost">Shitpost</a></li>
+            <li><a href="mailto:returnedmath@awareroblx.xyz">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="navbar-actions">
+          <!-- no idea what to put here -->
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+      <section class="section">
+        <div class="container">
+          <div class="section-header">
+            <h2>product details</h2>
+            <h class="btn-text" onclick="window.location.href='/products'">Back to Products</h>
+            <i class="fas fa-arrow-right" onclick="window.location.href='../../../'"></i>
+          </div>
+
+          <!-- Product Detail -->
+          <div class="product-detail">
+            <div class="product-content">
+              <div class="product-header">
+                <div class="product-icon"><i class="fas fa-arrow-right"></i></div>
+                <div class="product-title">
+                  <h3>CafePOS - Web Menu Configuration</h3>
+                  <p>Version 1.0 • Updated May 28, 2025</p>
+                </div>
+              </div>
+
+              <div class="product-description">
+                <p>tell chris this is pro - use config.returnedmath.xyz to configure dis</p>
+              </div>
+
+              <div class="product-media">
+                <img src="api/placeholder/800/400" alt=" ">
+              </div>
+
+              <div class="product-actions">
+                <div class="action-group">
+                  <button class="action-btn" id="likeBtn">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span id="likeCount">0</span> Likes
+                  </button>
+                  <button class="action-btn" id="dislikeBtn">
+                    <i class="fas fa-thumbs-down"></i>
+                    <span id="dislikeCount">0</span> Dislikes
+                  </button>
+                  <button class="action-btn">
+                    <i class="fas fa-share"></i>
+                    Share
+                  </button>
+                </div>
+                <button class="btn-glass" onclick="window.location.href = '/products/tablet/Tablet%20Ordering%20System.rbxm'">
+                  <i class="fas fa-download"></i> Download
+                </button>
+              </div>
+
+              <!-- Comments Section -->
+              <div class="comments-section">
+                <div class="comments-header">
+                  <h3>Comments</h3>
+                </div>
+                <form class="comment-form" id="commentForm">
+                  <textarea class="comment-input" id="commentInput" placeholder="Add a comment..." rows="3"></textarea>
+                  <button type="submit" class="comment-submit">Post</button>
+                </form>
+                <ul class="comment-list">
+                
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="container">
+        <p>returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie</p>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast"></div>
+</body>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the product ID from URL or set a default
+  const urlParams = new URLSearchParams(window.location.search);
+  const productId = urlParams.get('product_id') || 'remote-menu'; // Default if not specified
+
+  // Elements
+  const likeBtn = document.getElementById('likeBtn');
+  const dislikeBtn = document.getElementById('dislikeBtn');
+  const likeCount = document.getElementById('likeCount');
+  const dislikeCount = document.getElementById('dislikeCount');
+  const commentForm = document.getElementById('commentForm');
+  const commentInput = document.getElementById('commentInput');
+  const commentList = document.querySelector('.comment-list');
+  const toast = document.getElementById('toast');
+
+  // State tracking
+  let userInteraction = {
+    hasLiked: false,
+    hasDisliked: false
+  };
+
+  // Load interaction state from localStorage if available
+  loadUserInteractionState();
+  
+  // Initialize - fetch current stats and comments
+  fetchStats();
+  fetchComments();
+
+  // Event listeners
+  likeBtn.addEventListener('click', handleLike);
+  dislikeBtn.addEventListener('click', handleDislike);
+  commentForm.addEventListener('submit', handleCommentSubmit);
+
+  // Functions
+  function fetchStats() {
+    fetch(`https://product-stats-worker.ilovebacon590.workers.dev/stats?product_id=${productId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Try to parse as JSON, if it fails, handle gracefully
+        return response.json().catch(() => ({ likes: 0, dislikes: 0 }));
+      })
+      .then(data => {
+        // Update the UI with the fetched stats
+        likeCount.textContent = data.likes || 0;
+        dislikeCount.textContent = data.dislikes || 0;
+        
+        // Update button states based on user's previous interactions
+        updateButtonStates();
+      })
+      .catch(error => {
+        console.error('Error fetching stats:', error);
+        // Don't show toast for stat errors, just use whatever is in the HTML
+      });
+  }
+
+  function fetchComments() {
+    fetch(`https://product-stats-worker.ilovebacon590.workers.dev/comments?product_id=${productId}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // Try to parse as JSON, if it fails, handle as empty array
+        return response.json().catch(() => []);
+      })
+      .then(comments => {
+        // Clear existing comments
+        commentList.innerHTML = '';
+        
+        // Add each comment to the list
+        if (!comments || comments.length === 0) {
+          commentList.innerHTML = '<p class="comment-item">No comments yet. Be the first to comment!</p>';
+        } else {
+          // Sort comments newest first if they have a date
+          comments.sort((a, b) => {
+            if (!a.date) return 1;
+            if (!b.date) return -1;
+            return new Date(b.date) - new Date(a.date);
+          });
+          
+          comments.forEach(comment => {
+            addCommentToUI(comment);
+          });
+        }
+      })
+      .catch(error => {
+        showToast(`Error fetching comments: ${error.message}`);
+        console.error('Error fetching comments:', error);
+      });
+  }
+
+  function handleLike() {
+    if (userInteraction.hasLiked) {
+      // Unlike - user already liked and is clicking again
+      unlikeProduct();
+    } else {
+      // Like the product
+      if (userInteraction.hasDisliked) {
+        // If they previously disliked, remove dislike first
+        undislikeProduct();
+      }
+      likeProduct();
+    }
+  }
+
+  function handleDislike() {
+    if (userInteraction.hasDisliked) {
+      // Undislike - user already disliked and is clicking again
+      undislikeProduct();
+    } else {
+      // Dislike the product
+      if (userInteraction.hasLiked) {
+        // If they previously liked, remove like first
+        unlikeProduct();
+      }
+      dislikeProduct();
+    }
+  }
+
+  function likeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'like'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasLiked = true;
+      if (data.likes !== undefined) {
+        likeCount.textContent = data.likes;
+      } else {
+        likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Thanks for liking!');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasLiked = true;
+      likeCount.textContent = parseInt(likeCount.textContent) + 1;
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error liking product:', error);
+    });
+  }
+
+  function unlikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'unlike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasLiked = false;
+      if (data.likes !== undefined) {
+        likeCount.textContent = data.likes;
+      } else {
+        likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Like removed');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasLiked = false;
+      likeCount.textContent = Math.max(0, parseInt(likeCount.textContent) - 1);
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error unliking product:', error);
+    });
+  }
+
+  function dislikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'dislike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasDisliked = true;
+      if (data.dislikes !== undefined) {
+        dislikeCount.textContent = data.dislikes;
+      } else {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Feedback recorded');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasDisliked = true;
+      dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error disliking product:', error);
+    });
+  }
+
+  function undislikeProduct() {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/likes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        action: 'undislike'
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Try to parse as JSON, if it fails, handle the response as text
+      return response.json().catch(() => ({ success: true }));
+    })
+    .then(data => {
+      userInteraction.hasDisliked = false;
+      if (data.dislikes !== undefined) {
+        dislikeCount.textContent = data.dislikes;
+      } else {
+        dislikeCount.textContent = Math.max(0, parseInt(dislikeCount.textContent) - 1);
+      }
+      updateButtonStates();
+      saveUserInteractionState();
+      showToast('Dislike removed');
+    })
+    .catch(error => {
+      // Even if there's an error, update the UI for better user experience
+      userInteraction.hasDisliked = false;
+      dislikeCount.textContent = Math.max(0, parseInt(dislikeCount.textContent) - 1);
+      updateButtonStates();
+      saveUserInteractionState();
+      
+      console.error('Error removing dislike:', error);
+    });
+  }
+
+  function handleCommentSubmit(event) {
+    event.preventDefault();
+    
+    const commentText = commentInput.value.trim();
+    if (!commentText) {
+      showToast('Please enter a comment');
+      return;
+    }
+    
+    submitComment(commentText);
+  }
+
+  function submitComment(content) {
+    fetch('https://product-stats-worker.ilovebacon590.workers.dev/comments', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        content: content
+      })
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      // Clone the response before trying to parse as JSON
+      // This allows us to fall back to text() if JSON parsing fails
+      const responseClone = response.clone();
+      
+      return response.json()
+        .catch(() => {
+          // If JSON parsing fails, try to get the text instead
+          return responseClone.text()
+            .then(textData => {
+              // Try to parse the text as JSON, or return a simple success object
+              try {
+                return JSON.parse(textData);
+              } catch (e) {
+                return { success: true };
+              }
+            });
+        });
+    })
+    .then(data => {
+      // Clear the input field
+      commentInput.value = '';
+      
+      // Create a new comment object if we didn't get one from the API
+      const newComment = typeof data === 'object' ? data : {
+        id: Date.now().toString(), // Generate a temporary ID
+        content: content,
+        username: 'You',
+        date: new Date().toISOString()
+      };
+      
+      // Add the new comment to the UI
+      addCommentToUI(newComment);
+      
+      showToast('Comment posted successfully!');
+      
+      // Optionally, refresh all comments to ensure we have the latest data
+      setTimeout(fetchComments, 1000);
+    })
+    .catch(error => {
+      showToast(`Error posting comment: ${error.message}`);
+      console.error('Error posting comment:', error);
+      
+      // Even if there's an error with the server, add the comment to the UI
+      // so the user doesn't lose their input
+      const fallbackComment = {
+        id: Date.now().toString(),
+        content: content,
+        username: 'You (Pending)',
+        date: new Date().toISOString()
+      };
+      
+      addCommentToUI(fallbackComment);
+    });
+  }
+
+  function addCommentToUI(comment) {
+    // Remove any "no comments" message if it exists
+    const noCommentsMsg = commentList.querySelector('p');
+    if (noCommentsMsg && noCommentsMsg.textContent.includes('No comments yet')) {
+      noCommentsMsg.remove();
+    }
+    
+    // Create comment element
+    const commentItem = document.createElement('li');
+    commentItem.className = 'comment-item';
+    commentItem.setAttribute('data-comment-id', comment.id);
+    
+    // Format date (assuming comment.date is an ISO string or timestamp)
+    let commentDate;
+    try {
+      commentDate = comment.date ? new Date(comment.date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }) : 'Just now';
+    } catch(e) {
+      commentDate = 'Recently';
+    }
+    
+    // Build comment HTML
+    commentItem.innerHTML = `
+      <div class="comment-header">
+        <div class="commenter">${'someone'}</div>
+        <div class="comment-time">${commentDate}</div>
+      </div>
+      <div class="comment-content">${escapeHTML(comment.content)}</div>
+      <div class="comment-actions">
+        <span class="comment-action">
+          <i class="fas fa-thumbs-up"></i> Like
+        </span>
+        <span class="comment-action">Reply</span>
+      </div>
+    `;
+    
+    // Add to the list (at the beginning for newest first)
+    commentList.insertBefore(commentItem, commentList.firstChild);
+  }
+
+  function updateButtonStates() {
+    // Update like button
+    if (userInteraction.hasLiked) {
+      likeBtn.classList.add('liked');
+    } else {
+      likeBtn.classList.remove('liked');
+    }
+    
+    // Update dislike button
+    if (userInteraction.hasDisliked) {
+      dislikeBtn.classList.add('disliked');
+    } else {
+      dislikeBtn.classList.remove('disliked');
+    }
+  }
+
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    
+    // Hide toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.remove('show');
+    }, 3000);
+  }
+
+  function saveUserInteractionState() {
+    localStorage.setItem(`product_${productId}_interaction`, JSON.stringify(userInteraction));
+  }
+
+  function loadUserInteractionState() {
+    const savedState = localStorage.getItem(`product_${productId}_interaction`);
+    if (savedState) {
+      try {
+        userInteraction = JSON.parse(savedState);
+      } catch (e) {
+        console.error('Error parsing saved interaction state', e);
+        userInteraction = { hasLiked: false, hasDisliked: false };
+      }
+    }
+  }
+
+  // Helper function to escape HTML and prevent XSS
+  function escapeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+});
+</script>
