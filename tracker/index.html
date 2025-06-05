@@ -4,12 +4,399 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>returnedmath's basement - Project Progress</title>
-  <link rel="stylesheet" href="../static/styles.css">
-  <link rel="stylesheet" href="../static/styles-tracker.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --blue-1: #3d5afe;
+      --blue-2: #536dfe;
+      --blue-3: #304ffe;
+      --red: #f50057;
+      --white: #ffffff;
+      --dark: #0a0a0c;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-stroke: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 0;
+      color: var(--white);
+      background: radial-gradient(circle at 50% 50%, var(--dark) 0%, var(--dark) 70%, #000 100%);
+      overflow-x: hidden;
+    }
+
+    .background-animation {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+    }
+
+    .ball-1 {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      left: -150px;
+      animation: moveBall1 20s linear infinite;
+    }
+
+    .ball-2 {
+      width: 250px;
+      height: 250px;
+      top: 50%;
+      left: -125px;
+      animation: moveBall2 25s linear infinite;
+    }
+
+    .ball-3 {
+      width: 350px;
+      height: 350px;
+      top: 100px;
+      right: -175px;
+      animation: moveBall3 22s linear infinite;
+    }
+
+    .ball-4 {
+      width: 280px;
+      height: 280px;
+      bottom: -140px;
+      left: 50%;
+      margin-left: -140px;
+      animation: moveBall4 27s linear infinite;
+    }
+
+    .ball-5 {
+      width: 320px;
+      height: 320px;
+      bottom: 50px;
+      right: -160px;
+      animation: moveBall5 24s linear infinite;
+    }
+
+    @keyframes moveBall1 {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(100px, 100px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes moveBall2 {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-100px, 50px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes moveBall3 {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(150px, -50px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes moveBall4 {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(-50px, 100px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    @keyframes moveBall5 {
+      0% { transform: translate(0, 0); }
+      50% { transform: translate(100px, -100px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 2rem;
+      left: 5vw;
+      right: 5vw;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-stroke);
+      border-radius: 1rem;
+      padding: 1rem 2rem;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+    
+    .navbar-logo h1 {
+      font-size: 1.8rem;
+      margin: 0;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .navbar-menu ul {
+      display: flex;
+      gap: 1rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .navbar-menu a {
+      text-decoration: none;
+      color: var(--white);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+      font-weight: 500;
+      font-size: 0.9rem;
+      display: inline-block;
+    }
+
+    .navbar-menu a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+    }
+
+    .navbar-menu a.active {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      border: none;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 10;
+      padding: 5rem 0;
+    }
+
+    .section {
+      padding: 4rem 0;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.5rem;
+      margin: 0;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-header h2:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 4px;
+      bottom: -5px;
+      left: 0;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+    }
+
+    .project-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+      border-radius: 20px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(20px);
+    }
+
+    .project-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .project-title {
+      font-size: 1.8rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .project-icon {
+      font-size: 1.2rem;
+      color: var(--blue-2);
+    }
+
+    .project-status {
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .project-status.status-active {
+      background: rgba(53, 109, 254, 0.1);
+      color: var(--blue-2);
+    }
+
+    .project-status.status-completed {
+      background: rgba(255, 0, 86, 0.1);
+      color: var(--red);
+    }
+
+    .project-description {
+      font-size: 1rem;
+      margin: 1rem 0;
+      line-height: 1.6;
+    }
+
+    .project-progress {
+      margin: 1.5rem 0;
+    }
+
+    .progress-info {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .progress-bar-container {
+      background: var(--glass);
+      border-radius: 12px;
+      height: 8px;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.5rem 0;
+    }
+
+    .task-status {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+    }
+
+    .task-status.completed {
+      background: var(--blue-2);
+      border-color: var(--blue-3);
+    }
+
+    .task-name {
+      font-size: 1rem;
+      margin: 0;
+    }
+
+    .completed-task {
+      opacity: 0.7;
+      text-decoration: line-through;
+    }
+
+    .project-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .meta-icon {
+      font-size: 1.1rem;
+      color: var(--blue-2);
+    }
+
+    .project-updates {
+      margin-top: 2rem;
+    }
+
+    .update-item {
+      margin-bottom: 1rem;
+    }
+
+    .update-date {
+      font-size: 0.8rem;
+      color: var(--white);
+      opacity: 0.7;
+    }
+
+    .update-content {
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-top: 0.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .update-content:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: linear-gradient(135deg, rgba(61, 90, 254, 0.1), rgba(61, 90, 254, 0.3));
+      z-index: 1;
+      border-radius: 10px;
+    }
+
+    .update-content > div {
+      position: relative;
+      z-index: 2;
+    }
+
+    footer {
+      background: var(--dark);
+      padding: 2rem 0;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      z-index: 10;
+    }
+
+    footer p {
+      margin: 0;
+      line-height: 1.6;
+    }
+  </style>
 </head>
 <body>
   <!-- Background with moving balls needs to be first in the body -->
