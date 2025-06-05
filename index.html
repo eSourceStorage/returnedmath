@@ -4,148 +4,345 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>returnedmath's basement</title>
-  <link rel="stylesheet" href="static/styles.css">
+  <style>
+    :root {
+      --blue-1: #3d5afe;
+      --blue-2: #536dfe;
+      --blue-3: #304ffe;
+      --red: #f50057;
+      --white: #ffffff;
+      --dark: #0a0a0c;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-stroke: rgba(255, 255, 255, 0.05);
+    }
+
+    body {
+      background: var(--dark);
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+      color: var(--white);
+      line-height: 1.5;
+    }
+
+    .content {
+      position: relative;
+      width: 90vw;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 8rem 0;
+    }
+
+    .background {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .ball {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.4;
+    }
+
+    .ball-1 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, var(--blue-1) 0%, var(--blue-3) 50%, var(--blue-2) 100%);
+      top: 10%;
+      left: -50px;
+      animation: float1 25s infinite;
+    }
+
+    .ball-2 {
+      width: 200px;
+      height: 200px;
+      background: linear-gradient(135deg, var(--white) 0%, var(--blue-2) 100%);
+      bottom: 10%;
+      right: -50px;
+      animation: float2 18s infinite;
+    }
+
+    .ball-3 {
+      width: 250px;
+      height: 250px;
+      background: linear-gradient(135deg, var(--blue-3) 0%, var(--red) 100%);
+      top: 50%;
+      left: 20%;
+      animation: float3 30s infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(100px, 100px) rotate(180deg); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      50% { transform: translate(-100px, -50px) rotate(-180deg); }
+    }
+
+    @keyframes float3 {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg) translate(150px) rotate(-360deg); }
+    }
+
+    .navbar {
+      position: fixed;
+      top: 2rem;
+      left: 5vw;
+      right: 5vw;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-stroke);
+      border-radius: 1rem;
+      padding: 1rem 2rem;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 2rem;
+    }
+
+    .navbar-menu a {
+      text-decoration: none;
+      color: var(--white);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+      font-weight: 500;
+    }
+
+    .navbar-menu a:hover {
+      opacity: 1;
+      background: rgba(255, 255, 255, 0.05);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .navbar-menu a.active {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      border: none;
+    }
+
+    .section {
+      margin-bottom: 8rem;
+      max-width: 800px;
+      margin-inline: auto;
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .view-progress {
+      color: var(--white);
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: opacity 0.3s ease;
+    }
+
+    .view-progress:hover {
+      opacity: 1;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--glass-stroke-hover);
+      background: var(--glass-hover);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      color: var(--white);
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .card-content h3 {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-content p {
+      opacity: 0.7;
+      margin-bottom: 1.5rem;
+    }
+
+    .btn {
+      background: var(--glass);
+      color: var(--color-white);
+      border: 1px solid var(--glass-stroke);
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 500;
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      margin-top: auto;
+      align-self: flex-start;
+    }
+
+    .btn:hover {
+      border-color: var(--glass-stroke-hover);
+      background: var(--bg-gradient);
+      transform: translateY(-2px);
+    }
+
+    footer {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      text-align: center;
+    }
+
+    @media (max-width: 640px) {
+      .card {
+        gap: 1rem;
+      }
+
+      .btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
+</style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-  <!-- Background with moving balls needs to be first in the body -->
-  <div class="background-animation">
+  <div class="background">
     <div class="ball ball-1"></div>
     <div class="ball ball-2"></div>
     <div class="ball ball-3"></div>
-    <div class="ball ball-4"></div>
-    <div class="ball ball-5"></div>
   </div>
-
-  <!-- Content wrapper to ensure content sits above background -->
-  <div class="content-wrapper">
-    <!-- Top Navigation Bar -->
-    <header class="navbar">
-      <div class="navbar-container">
-        <div class="navbar-logo">
-          <h1>returnedmath's basement</h1>
-        </div>
-        <nav class="navbar-menu">
-          <ul>
-            <li><a href="#" class="active">Home</a></li>
-            <li><a href="/tracker">Progress</a></li>
-            <li><a href="/shitpost">Shitpost</a></li>
-            <li><a href="mailto:returnedmath@awareroblox.xyz">Contact</a></li>
-          </ul>
-        </nav>
-        <div class="navbar-actions">
-            <!-- no idea what to put here -->
-        </div>
+  <div class="content">
+    <nav class="navbar">
+      <h1>returnedmath's basement</h1>
+      <div class="navbar-menu">
+        <a href="#" class="active">Home</a>
+        <a href="/tracker">Progress</a>
+        <a href="/shitpost">Shitpost</a>
+        <a href="mailto:returnedmath@awareroblox.xyz">Contact</a>
       </div>
-    </header>
+    </nav>
 
-    <!-- Main Content -->
     <main>
       <section class="section">
-        <div class="container">
-          <div class="section-header">
-            <h2>thingies i made</h2>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <h class="btn-text" onclick="window.location.href='/tracker'">View Progress</h>
-            <i class="fas fa-arrow-right" onclick="window.location.href='/tracker'"></i>
-          </div>
+        <div class="section-header">
+          <h2>thingies i made</h2>
+          <a href="/tracker" class="view-progress">
+            View Progress
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
 
-          <div class="card-grid">
-            <!-- Card 1 -->
-             <div class="card">
-              <div class="card-top">
-                <div class="card-icon"><i class="fas fa-globe"></i></div>
-                <h3>web config</h3>
-                <p>web config menu</p>
-              </div>
-              <div class="card-bottom">
-                <button class="btn-glass" onclick="window.location.href='/products/web-config'">Download</button>
-              </div>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon"><i class="fas fa-globe"></i></div>
+            <div class="card-content">
+              <h3>web config</h3>
+              <p>web config menu</p>
+              <button class="btn" onclick="window.location.href='/products/web-config'">Download</button>
             </div>
           </div>
-            <div class="card">
-              <div class="card-top">
-                <div class="card-icon"><i class="fas fa-tablet"></i></div>
-                <h3>Tablet Ordering System</h3>
-                <p>very gud addon for ezpos cafepos, download now free i said!!!!!11</p>
-              </div>
-              <div class="card-bottom">
-                <button class="btn-glass" onclick="window.location.href='/products/tablet'">Download</button>
-              </div>
+          <div class="card">
+            <div class="card-icon"><i class="fas fa-tablet"></i></div>
+            <div class="card-content">
+              <h3>Tablet Ordering System</h3>
+              <p>very gud addon for ezpos cafepos, download now free i said!!!!!11</p>
+              <button class="btn" onclick="window.location.href='/products/tablet'">Download</button>
             </div>
-            
           </div>
-          
         </div>
       </section>
 
       <section class="section">
-        <div class="container">
-          <div class="section-header">
-            <h2>random stuff</h2>
+        <div class="section-header">
+          <h2>random stuff</h2>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon"><i class="fas fa-e"></i></div>
+            <div class="card-content">
+              <h3>Best POS systemo for boblox</h3>
+              <p>I SAID BUY THEIR CAFEPOS NOW!!! (and make sure to use tablet ordering system)</p>
+            </div>
+            <button class="btn" onclick="window.location.href='/selection'">Visit</button>
           </div>
 
-          <div class="card-grid">
-            <!-- Card 1 -->
-            <div class="card">
-              <div class="card-top">
-                <div class="card-icon"><i class="fas fa-e"></i></div>
-                <h3>Best POS systemo for boblox</h3>
-                <p>I SAID BUY THEIR CAFEPOS NOW!!! (and make sure to use tablet ordering system)</p>
-              </div>
-              <div class="card-bottom">
-                <button class="btn-glass" onclick="window.location.href='/selection'">Visit</button>
-              </div>
+          <div class="card">
+            <div class="card-icon"><i class="fas fa-store"></i></div>
+            <div class="card-content">
+              <h3>Best Retail stuffs for boblox (like scos)</h3>
+              <p>hmmmm?? axon.whitehill.group??!?!?!?!</p>
             </div>
+            <button class="btn" onclick="window.location.href='http://axon.whitehill.group'">Visit</button>
+          </div>
 
-            <!-- Card 2 -->
-             <div class="card">
-              <div class="card-top">
-                <div class="card-icon"><i class="fas fa-store"></i></div>
-                <h3>Best Retail stuffs for boblox (like scos)</h3>
-                <p>hmmmm?? axon.whitehill.group??!?!?!?!</p>
-              </div>
-              <div class="card-bottom">
-                <button class="btn-glass" onclick="window.location.href='http://axon.whitehill.group'">Visit</button>
-              </div>
+          <div class="card">
+            <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
+            <div class="card-content">
+              <h3>Best light stuffs for boblox</h3>
+              <p>native!11!1 (not fisch related idiidiot)</p>
             </div>
-            <!-- Card 2 -->
-             <div class="card">
-              <div class="card-top">
-                <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
-                <h3>Best light stuffs for boblox</h3>
-                <p>native!11!1 (not fisch related idiidiot)</p>
-              </div>
-              <div class="card-bottom">
-                <button class="btn-glass" onclick="window.location.href='http://discord.gg/native'">Visit</button>
-              </div>
-            </div>
+            <button class="btn" onclick="window.location.href='http://discord.gg/native'">Visit</button>
           </div>
         </div>
       </section>
     </main>
 
     <footer>
-      <div class="container">
-        <p>returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie</p>
-      </div>
+      <p>returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie returnedmath is a cutie</p>
     </footer>
   </div>
 
   <script>
-    // Add smooth scrolling for links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function (e) {
         e.preventDefault();
