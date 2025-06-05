@@ -10,12 +10,15 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #6e57e0;
-      --secondary-color: #ff7f50;
-      --background-color: #050814;
-      --card-bg-color: rgba(30, 41, 59, 0.7);
-      --text-color: #f8fafc;
-      --border-radius: 12px;
+      --primary-color: #3d5afe;
+      --secondary-color: #536dfe;
+      --background-color: #0a0a0c;
+      --card-bg-color: rgba(255, 255, 255, 0.03);
+      --text-color: #ffffff;
+      --border-radius: 20px;
+      --button-radius: 12px;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-stroke: rgba(255, 255, 255, 0.05);
       --transition: all 0.3s ease;
     }
 
@@ -121,11 +124,15 @@
 
     /* Navbar */
     .navbar {
-      padding: 1rem 0;
-      background: rgba(5, 8, 20, 0.8);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 2rem;
+      left: 5vw;
+      right: 5vw;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-stroke);
+      border-radius: var(--border-radius);
+      padding: 1rem 2rem;
       z-index: 100;
     }
 
@@ -154,26 +161,24 @@
     }
 
     .navbar-menu a {
-      color: var(--text-color);
       text-decoration: none;
-      font-weight: 500;
-      transition: var(--transition);
-      padding: 0.5rem 0;
-      position: relative;
+      color: var(--text-color);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: var(--button-radius);
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
     }
 
     .navbar-menu a:hover, .navbar-menu a.active {
       color: var(--primary-color);
     }
 
-    .navbar-menu a.active:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: var(--primary-color);
+    .navbar-menu a.active {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      border: none;
     }
 
     /* Container */
@@ -259,7 +264,7 @@
       width: 50px;
       height: 50px;
       background: rgba(110, 87, 224, 0.2);
-      border-radius: 12px;
+      border-radius: var(--button-radius);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -342,7 +347,7 @@
       background: rgba(110, 87, 224, 0.2);
       border: 1px solid rgba(110, 87, 224, 0.3);
       padding: 0.75rem 1.5rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       color: var(--text-color);
       font-weight: 600;
       cursor: pointer;
@@ -371,7 +376,7 @@
     .comment-input {
       flex: 1;
       padding: 1rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(30, 41, 59, 0.5);
       color: var(--text-color);
@@ -386,7 +391,7 @@
     .comment-submit {
       margin-left: 1rem;
       padding: 0 1.5rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       border: none;
       background: var(--primary-color);
       color: white;
