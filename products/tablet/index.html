@@ -10,13 +10,19 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #6e57e0;
-      --secondary-color: #ff7f50;
-      --background-color: #050814;
-      --card-bg-color: rgba(30, 41, 59, 0.7);
-      --text-color: #f8fafc;
-      --border-radius: 12px;
-      --transition: all 0.3s ease;
+      --blue-1: #3d5afe;
+      --blue-2: #536dfe;
+      --blue-3: #304ffe;
+      --red: #f50057;
+      --white: #ffffff;
+      --dark: #0a0a0c;
+      --glass: rgba(255, 255, 255, 0.03);
+      --glass-stroke: rgba(255, 255, 255, 0.05);
+      --glass-hover: rgba(255, 255, 255, 0.08);
+      --text-color: var(--white);
+      --background-color: var(--dark);
+      --border-radius: 20px;
+      --button-radius: 12px;
     }
 
     * {
@@ -26,11 +32,10 @@
     }
 
     body {
+      background: var(--background-color);
       font-family: 'Inter', sans-serif;
-      background-color: var(--background-color);
       color: var(--text-color);
       line-height: 1.6;
-      position: relative;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -121,11 +126,15 @@
 
     /* Navbar */
     .navbar {
-      padding: 1rem 0;
-      background: rgba(5, 8, 20, 0.8);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 0;
+      position: fixed;
+      top: 2rem;
+      left: 5vw;
+      right: 5vw;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-stroke);
+      border-radius: var(--border-radius);
+      padding: 1rem 2rem;
       z-index: 100;
     }
 
@@ -142,6 +151,10 @@
       font-size: 1.5rem;
       font-weight: 700;
       color: var(--text-color);
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .navbar-menu ul {
@@ -154,26 +167,27 @@
     }
 
     .navbar-menu a {
-      color: var(--text-color);
       text-decoration: none;
+      color: var(--white);
+      opacity: 0.7;
+      transition: all 0.3s ease;
+      padding: 0.5rem 1rem;
+      border-radius: var(--button-radius);
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
       font-weight: 500;
-      transition: var(--transition);
-      padding: 0.5rem 0;
-      position: relative;
     }
 
-    .navbar-menu a:hover, .navbar-menu a.active {
-      color: var(--primary-color);
+    .navbar-menu a:hover {
+      opacity: 1;
+      background: var(--glass-hover);
+      transform: translateY(-2px);
     }
 
-    .navbar-menu a.active:after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: var(--primary-color);
+    .navbar-menu a.active {
+      opacity: 1;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      border: none;
     }
 
     /* Container */
@@ -201,11 +215,14 @@
       font-size: 1.8rem;
       font-weight: 700;
       color: var(--text-color);
-      position: relative;
+      background: linear-gradient(135deg, var(--white), var(--blue-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
     .btn-text {
-      color: var(--primary-color);
+      color: var(--white);
       font-weight: 600;
       cursor: pointer;
       display: flex;
@@ -231,18 +248,10 @@
 
     /* Product Detail Card */
     .product-detail {
-      background: var(--card-bg-color);
+      background: var(--glass);
+      border: 1px solid var(--glass-stroke);
+      backdrop-filter: blur(20px);
       border-radius: var(--border-radius);
-      backdrop-filter: blur(10px);
-      overflow: hidden;
-      transition: var(--transition);
-      margin-bottom: 2rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .product-detail:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
 
     .product-content {
@@ -259,7 +268,7 @@
       width: 50px;
       height: 50px;
       background: rgba(110, 87, 224, 0.2);
-      border-radius: 12px;
+      border-radius: var(--button-radius);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -339,18 +348,15 @@
     }
 
     .btn-glass {
-      background: rgba(110, 87, 224, 0.2);
-      border: 1px solid rgba(110, 87, 224, 0.3);
-      padding: 0.75rem 1.5rem;
-      border-radius: var(--border-radius);
-      color: var(--text-color);
-      font-weight: 600;
-      cursor: pointer;
-      transition: var(--transition);
+      background: var(--glass);
+      color: var(--white);
+      border: 1px solid var(--glass-stroke);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+      border-radius: var(--button-radius);
     }
 
     .btn-glass:hover {
-      background: rgba(110, 87, 224, 0.3);
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
       transform: translateY(-2px);
     }
 
@@ -371,7 +377,7 @@
     .comment-input {
       flex: 1;
       padding: 1rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(30, 41, 59, 0.5);
       color: var(--text-color);
@@ -386,7 +392,7 @@
     .comment-submit {
       margin-left: 1rem;
       padding: 0 1.5rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       border: none;
       background: var(--primary-color);
       color: white;
@@ -477,7 +483,7 @@
       width: 50px;
       height: 50px;
       background: rgba(110, 87, 224, 0.2);
-      border-radius: 12px;
+      border-radius: var(--button-radius);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -569,7 +575,7 @@
       background: var(--primary-color);
       color: white;
       padding: 1rem 2rem;
-      border-radius: var(--border-radius);
+      border-radius: var(--button-radius);
       box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
       transform: translateY(100px);
       opacity: 0;
