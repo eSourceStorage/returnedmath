@@ -325,9 +325,18 @@
       }
     };
 
-    // Updated callback handling for cross-domain
+    // Updated callback handling
     if (window.location.pathname === '/auth-callback') {
       const params = new URLSearchParams(window.location.search);
+      
+      // Check for errors first
+      if (params.has('error')) {
+        console.error("Auth error:", params.get('error_description'));
+        alert("Authentication failed: " + params.get('error_description'));
+        window.location.href = '/';
+        throw new Error(params.get('error_description'));
+      }
+
       const code = params.get('code');
       if (code) {
         try {
@@ -340,15 +349,24 @@
             },
             body: JSON.stringify({ code })
           });
+
+          if (!response.ok) {
+            throw new Error('Auth request failed');
+          }
+
           const data = await response.json();
           if (data.message === 'authcomplete') {
             AUTH_STATE.isLoggedIn = true;
             AUTH_STATE.user = data.user;
             handleLoginSuccess();
             window.location.href = '/';
+          } else if (data.message === 'error') {
+            throw new Error(data.description || 'Authentication failed');
           }
         } catch (err) {
           console.error("Auth callback error:", err);
+          alert("Authentication failed: " + err.message);
+          window.location.href = '/';
         }
       }
     }
