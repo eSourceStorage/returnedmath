@@ -323,10 +323,15 @@
       }
     };
 
-    // Updated callback handling
+    function generateToken() {
+      return Array.from(crypto.getRandomValues(new Uint8Array(32)))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+
+    // Updated auth callback handling
     if (window.location.pathname === '/auth-callback') {
       const params = new URLSearchParams(window.location.search);
-      
       if (params.has('error')) {
         console.error("Auth error:", params.get('error_description'));
         window.location.href = '/';
@@ -336,6 +341,7 @@
       const code = params.get('code');
       if (code) {
         try {
+          const token = generateToken(); // Generate secure token
           const response = await fetch(`${AUTH_STATE.authDomain}/callback`, {
             method: 'POST',
             credentials: 'include',
@@ -343,12 +349,17 @@
               'Content-Type': 'application/json',
               'Origin': 'https://returnedmath.xyz'
             },
-            body: JSON.stringify({ code })
+            body: JSON.stringify({ 
+              code,
+              token // Send token to server
+            })
           });
 
           const data = await response.json();
           if (data.message === 'success' || data.message === 'authcomplete') {
-            handleLoginSuccess();
+            // Set secure cookie
+            document.cookie = `auth=${token}; Domain=.returnedmath.xyz; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`;
+            updateAuthUI(true);
             window.location.href = '/';
           }
         } catch (err) {
@@ -369,11 +380,21 @@
     <nav class="navbar">
       <h1>returnedmath's basement</h1>
       <div class="navbar-menu">
+        <a href="/" class="active">Home</a>
+        <a href="/tracker">Progress</a>
+        <a href="/shitpost" target="_blank">Shitpost</a>
+        <a href="mailto:returnedmath@awareroblox.xyz">Contact</a>
+        
+        <!-- Fixed auth container -->
+        <div id="auth-container">
+          <button id="loginBtn" class="btn" onclick="initAuth()">Login</button>
+          <div id="userMenu" class="user-menu" style="display: none">
+            <div class="user-icon">
               <i class="fas fa-user"></i>
             </div>
             <div class="user-dropdown">
               <a href="/profile">Profile</a>
-              <a href="#" onclick="logout()">Logout</a>
+              <a href="#" onclick="logout(); return false;">Logout</a>
             </div>
           </div>
         </div>
@@ -496,6 +517,7 @@
     // Fixed logout handler
     async function logout() {
       try {
+        document.cookie = 'auth=; Domain=.returnedmath.xyz; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
         await fetch(`${AUTH_STATE.authDomain}/logout`, {
           method: 'POST',
           credentials: 'include',
@@ -503,17 +525,34 @@
             'Origin': 'https://returnedmath.xyz'
           }
         });
-        AUTH_STATE.isLoggedIn = false;
-        AUTH_STATE.user = null;
         updateAuthUI(false);
+        window.location.href = '/';
       } catch (err) {
         console.error("Logout error:", err);
       }
     }
 
     // Check initial auth state
-    const isLoggedIn = document.cookie.includes('user_id=');
+    const isLoggedIn = document.cookie.includes('auth=');
     updateAuthUI(isLoggedIn);
+
+    // Fixed dropdown handlers
+    document.addEventListener('DOMContentLoaded', () => {
+      const userIcon = document.querySelector('.user-icon');
+      const userDropdown = document.querySelector('.user-dropdown');
+      const authContainer = document.getElementById('auth-container');
+
+      userIcon?.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userDropdown?.classList.toggle('active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!authContainer?.contains(e.target)) {
+          userDropdown?.classList.remove('active');
+        }
+      });
+    });
   </script>
 </body>
 </html>
