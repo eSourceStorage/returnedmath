@@ -305,10 +305,8 @@
   <script type="module">
     import { authConfig } from './auth.js';
 
-    // Auth state management
+    // Simple auth state
     const AUTH_STATE = {
-      isLoggedIn: false,
-      user: null,
       authDomain: 'https://auth.returnedmath.xyz'
     };
 
@@ -329,12 +327,10 @@
     if (window.location.pathname === '/auth-callback') {
       const params = new URLSearchParams(window.location.search);
       
-      // Check for errors first
       if (params.has('error')) {
         console.error("Auth error:", params.get('error_description'));
-        alert("Authentication failed: " + params.get('error_description'));
         window.location.href = '/';
-        throw new Error(params.get('error_description'));
+        return;
       }
 
       const code = params.get('code');
@@ -350,22 +346,13 @@
             body: JSON.stringify({ code })
           });
 
-          if (!response.ok) {
-            throw new Error('Auth request failed');
-          }
-
           const data = await response.json();
-          if (data.message === 'success') {
-            AUTH_STATE.isLoggedIn = true;
-            AUTH_STATE.user = data.user;
+          if (data.message === 'success' || data.message === 'authcomplete') {
             handleLoginSuccess();
-            window.location.href = data.redirect || '/';
-          } else if (data.message === 'error') {
-            throw new Error(data.description || 'Authentication failed');
+            window.location.href = '/';
           }
         } catch (err) {
-          console.error("Auth callback error:", err);
-          alert("Authentication failed: " + err.message);
+          console.error("Auth error:", err);
           window.location.href = '/';
         }
       }
@@ -382,14 +369,6 @@
     <nav class="navbar">
       <h1>returnedmath's basement</h1>
       <div class="navbar-menu">
-        <a href="#" class="active">Home</a>
-        <a href="/tracker">Progress</a>
-        <a href="/shitpost">Shitpost</a>
-        <a href="mailto:returnedmath@awareroblox.xyz">Contact</a>
-        <div id="auth-container">
-          <button id="loginBtn" class="btn" onclick="initAuth()">Login</button>
-          <div id="userMenu" class="user-menu" style="display: none">
-            <div class="user-icon">
               <i class="fas fa-user"></i>
             </div>
             <div class="user-dropdown">
