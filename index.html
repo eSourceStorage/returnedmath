@@ -309,6 +309,15 @@
       clientId: '123-auth-client' // Replace with your actual client ID
     };
 
+    // Check auth state immediately when script loads
+    const checkAuthState = () => {
+      const isLoggedIn = document.cookie.includes('isAuthenticated=1');
+      updateAuthUI(isLoggedIn);
+    };
+    
+    // Check auth state on page load
+    document.addEventListener('DOMContentLoaded', checkAuthState);
+
     // Simplified auth initialization
     window.initAuth = () => {
       const url = new URL(`${AUTH_STATE.authDomain}/authorize`);
@@ -318,7 +327,7 @@
       window.location.href = url.toString();
     };
 
-    // Simplified callback handling
+    // Update callback handling
     if (window.location.pathname === '/auth-callback') {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code');
@@ -335,11 +344,11 @@
         .then(res => res.json())
         .then(data => {
           if (data.message === 'success' || data.message === 'authcomplete') {
-            handleLoginSuccess();
+            document.cookie = `isAuthenticated=1; Domain=.returnedmath.xyz; Path=/; Secure; SameSite=Strict; Max-Age=604800`;
+            checkAuthState(); // Check state after setting cookie
+            window.location.href = '/';
           }
-          window.location.href = '/';
-        })
-        .catch(() => window.location.href = '/');
+        });
       }
     }
   </script>
@@ -472,15 +481,15 @@
       }
     });
 
-    // Check auth state and show correct menu
+    // Update auth UI function
     function updateAuthUI(isLoggedIn) {
-      const loginBtn = document.getElementById('loginBtn');
-      const userMenu = document.getElementById('userMenu');
-      
-      if (!loginBtn || !userMenu) return;
-
-      loginBtn.style.display = isLoggedIn ? 'none' : 'block';
-      userMenu.style.display = isLoggedIn ? 'block' : 'none';
+      requestAnimationFrame(() => {
+        const loginBtn = document.getElementById('loginBtn');
+        const userMenu = document.getElementById('userMenu');
+        
+        if (loginBtn) loginBtn.style.display = isLoggedIn ? 'none' : 'block';
+        if (userMenu) userMenu.style.display = isLoggedIn ? 'block' : 'none';
+      });
     }
 
     // Call this after successful login
@@ -489,10 +498,6 @@
       // Save auth state
       document.cookie = `isAuthenticated=1; Domain=.returnedmath.xyz; Path=/; Secure; SameSite=Strict; Max-Age=604800`;
     }
-
-    // Simplified check for auth state
-    const isLoggedIn = document.cookie.includes('isAuthenticated=1');
-    updateAuthUI(isLoggedIn);
 
     // Fixed dropdown handlers
     document.addEventListener('DOMContentLoaded', () => {
