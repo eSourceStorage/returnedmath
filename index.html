@@ -303,69 +303,43 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <script type="module">
-    import { authConfig } from './auth.js';
-
-    // Simple auth state
+    // Fixed auth config with actual client ID
     const AUTH_STATE = {
-      authDomain: 'https://auth.returnedmath.xyz'
+      authDomain: 'https://auth.returnedmath.xyz',
+      clientId: '123-auth-client' // Replace with your actual client ID
     };
 
-    // Updated auth initialization with proper domains
-    window.initAuth = async () => {
-      try {
-        const url = new URL(`${AUTH_STATE.authDomain}/authorize`);
-        url.searchParams.set("redirect_uri", "https://returnedmath.xyz/auth-callback");
-        url.searchParams.set("client_id", authConfig.clientId);
-        url.searchParams.set("response_type", "code");
-        window.location.href = url.toString();
-      } catch (err) {
-        console.error("Auth error:", err);
-      }
+    // Simplified auth initialization
+    window.initAuth = () => {
+      const url = new URL(`${AUTH_STATE.authDomain}/authorize`);
+      url.searchParams.set("redirect_uri", "https://returnedmath.xyz/auth-callback");
+      url.searchParams.set("client_id", AUTH_STATE.clientId);
+      url.searchParams.set("response_type", "code");
+      window.location.href = url.toString();
     };
 
-    function generateToken() {
-      return Array.from(crypto.getRandomValues(new Uint8Array(32)))
-        .map(b => b.toString(16).padStart(2, '0'))
-        .join('');
-    }
-
-    // Updated auth callback handling
+    // Simplified callback handling
     if (window.location.pathname === '/auth-callback') {
       const params = new URLSearchParams(window.location.search);
-      if (params.has('error')) {
-        console.error("Auth error:", params.get('error_description'));
-        window.location.href = '/';
-        return;
-      }
-
       const code = params.get('code');
+      
       if (code) {
-        try {
-          const token = generateToken(); // Generate secure token
-          const response = await fetch(`${AUTH_STATE.authDomain}/callback`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-              'Origin': 'https://returnedmath.xyz'
-            },
-            body: JSON.stringify({ 
-              code,
-              token // Send token to server
-            })
-          });
-
-          const data = await response.json();
+        fetch(`${AUTH_STATE.authDomain}/callback`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ code })
+        })
+        .then(res => res.json())
+        .then(data => {
           if (data.message === 'success' || data.message === 'authcomplete') {
-            // Set secure cookie
-            document.cookie = `auth=${token}; Domain=.returnedmath.xyz; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=604800`;
-            updateAuthUI(true);
-            window.location.href = '/';
+            handleLoginSuccess();
           }
-        } catch (err) {
-          console.error("Auth error:", err);
           window.location.href = '/';
-        }
+        })
+        .catch(() => window.location.href = '/');
       }
     }
   </script>
@@ -512,28 +486,12 @@
     // Call this after successful login
     function handleLoginSuccess() {
       updateAuthUI(true);
+      // Save auth state
+      document.cookie = `isAuthenticated=1; Domain=.returnedmath.xyz; Path=/; Secure; SameSite=Strict; Max-Age=604800`;
     }
 
-    // Fixed logout handler
-    async function logout() {
-      try {
-        document.cookie = 'auth=; Domain=.returnedmath.xyz; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        await fetch(`${AUTH_STATE.authDomain}/logout`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Origin': 'https://returnedmath.xyz'
-          }
-        });
-        updateAuthUI(false);
-        window.location.href = '/';
-      } catch (err) {
-        console.error("Logout error:", err);
-      }
-    }
-
-    // Check initial auth state
-    const isLoggedIn = document.cookie.includes('auth=');
+    // Simplified check for auth state
+    const isLoggedIn = document.cookie.includes('isAuthenticated=1');
     updateAuthUI(isLoggedIn);
 
     // Fixed dropdown handlers
