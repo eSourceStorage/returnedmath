@@ -237,6 +237,55 @@
       text-align: center;
     }
 
+    .user-menu {
+      position: relative;
+    }
+
+    .user-icon {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue-1), var(--blue-3));
+      display: grid;
+      place-items: center;
+      color: var(--white);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .user-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .user-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 0.5rem;
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-stroke);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: none;
+    }
+
+    .user-dropdown.active {
+      display: block;
+    }
+
+    .user-dropdown a {
+      display: block;
+      padding: 0.5rem 1rem;
+      color: var(--white);
+      text-decoration: none;
+      border-radius: 0.5rem;
+    }
+
+    .user-dropdown a:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
     @media (max-width: 640px) {
       .card {
         gap: 1rem;
@@ -253,6 +302,57 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <script type="module">
+    import { authConfig } from './auth.js';
+
+    // Auth state management
+    const AUTH_STATE = {
+      isLoggedIn: false,
+      user: null,
+      authDomain: 'https://auth.returnedmath.xyz'
+    };
+
+    // Updated auth initialization with proper domains
+    window.initAuth = async () => {
+      try {
+        const url = new URL(`${AUTH_STATE.authDomain}/authorize`);
+        url.searchParams.set("redirect_uri", "https://returnedmath.xyz/auth-callback");
+        url.searchParams.set("client_id", authConfig.clientId);
+        url.searchParams.set("response_type", "code");
+        window.location.href = url.toString();
+      } catch (err) {
+        console.error("Auth error:", err);
+      }
+    };
+
+    // Updated callback handling for cross-domain
+    if (window.location.pathname === '/auth-callback') {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+      if (code) {
+        try {
+          const response = await fetch(`${AUTH_STATE.authDomain}/callback`, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+              'Origin': 'https://returnedmath.xyz'
+            },
+            body: JSON.stringify({ code })
+          });
+          const data = await response.json();
+          if (data.message === 'authcomplete') {
+            AUTH_STATE.isLoggedIn = true;
+            AUTH_STATE.user = data.user;
+            handleLoginSuccess();
+            window.location.href = '/';
+          }
+        } catch (err) {
+          console.error("Auth callback error:", err);
+        }
+      }
+    }
+  </script>
 </head>
 <body>
   <div class="background">
@@ -268,6 +368,18 @@
         <a href="/tracker">Progress</a>
         <a href="/shitpost">Shitpost</a>
         <a href="mailto:returnedmath@awareroblox.xyz">Contact</a>
+        <div id="auth-container">
+          <button id="loginBtn" class="btn" onclick="initAuth()">Login</button>
+          <div id="userMenu" class="user-menu" style="display: none">
+            <div class="user-icon">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="user-dropdown">
+              <a href="/profile">Profile</a>
+              <a href="#" onclick="logout()">Logout</a>
+            </div>
+          </div>
+        </div>
       </div>
     </nav>
 
@@ -351,6 +463,60 @@
         });
       });
     });
+
+    // Toggle user menu on click
+    const userIcon = document.querySelector('.user-icon');
+    const userDropdown = document.querySelector('.user-dropdown');
+
+    userIcon?.addEventListener('click', () => {
+      userDropdown?.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      const target = e.target;
+      if (!userIcon?.contains(target)) {
+        userDropdown?.classList.remove('active');
+      }
+    });
+
+    // Check auth state and show correct menu
+    function updateAuthUI(isLoggedIn) {
+      const loginBtn = document.getElementById('loginBtn');
+      const userMenu = document.getElementById('userMenu');
+      
+      if (!loginBtn || !userMenu) return;
+
+      loginBtn.style.display = isLoggedIn ? 'none' : 'block';
+      userMenu.style.display = isLoggedIn ? 'block' : 'none';
+    }
+
+    // Call this after successful login
+    function handleLoginSuccess() {
+      updateAuthUI(true);
+    }
+
+    // Fixed logout handler
+    async function logout() {
+      try {
+        await fetch(`${AUTH_STATE.authDomain}/logout`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Origin': 'https://returnedmath.xyz'
+          }
+        });
+        AUTH_STATE.isLoggedIn = false;
+        AUTH_STATE.user = null;
+        updateAuthUI(false);
+      } catch (err) {
+        console.error("Logout error:", err);
+      }
+    }
+
+    // Check initial auth state
+    const isLoggedIn = document.cookie.includes('user_id=');
+    updateAuthUI(isLoggedIn);
   </script>
 </body>
 </html>
