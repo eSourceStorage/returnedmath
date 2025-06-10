@@ -1,14 +1,5 @@
 (function() {
-  if (localStorage.getItem('fontConsent') === 'accepted') {
-    loadFonts();
-    return;
-  }
-  if (!localStorage.getItem('fontConsent')) {
-    blockAccess();
-    return;
-  }
-
-  // Create banner element
+  // Create banner element early
   const banner = document.createElement('div');
   banner.id = 'consent-banner';
   banner.style = `
@@ -50,7 +41,6 @@
 
   // Function to load Google Fonts & Font Awesome
   function loadFonts() {
-    // Google Fonts preconnect
     const gf1 = document.createElement('link');
     gf1.rel = 'preconnect';
     gf1.href = 'https://fonts.googleapis.com';
@@ -62,19 +52,16 @@
     gf2.crossOrigin = 'anonymous';
     document.head.appendChild(gf2);
 
-    // Google Fonts stylesheet
     const gf3 = document.createElement('link');
     gf3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
     gf3.rel = 'stylesheet';
     document.head.appendChild(gf3);
 
-    // Font Awesome stylesheet
     const fa = document.createElement('link');
     fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
     fa.rel = 'stylesheet';
     document.head.appendChild(fa);
 
-    // Hide banner and unblock scrolling
     banner.style.display = 'none';
     block.style.display = 'none';
     document.body.style.overflow = '';
@@ -87,11 +74,32 @@
     document.body.style.overflow = 'hidden'; // prevent scrolling
   }
 
+  // Check consent status AFTER elements exist
+  if (localStorage.getItem('fontConsent') === 'accepted') {
+    loadFonts();
+    return;
+  }
+  if (!localStorage.getItem('fontConsent')) {
+    // Show banner, don't block yet
+    banner.style.display = 'block';
+    block.style.display = 'none';
+    return;
+  }
+  // If they explicitly declined (e.g. stored 'declined' or anything else), block access:
+  if (localStorage.getItem('fontConsent') === 'declined') {
+    blockAccess();
+    return;
+  }
+
   // Button click handlers
   banner.addEventListener('click', function(e) {
     if (e.target.id === 'accept-consent') {
       localStorage.setItem('fontConsent', 'accepted');
       loadFonts();
+    }
+    if (e.target.id === 'decline-consent') {
+      localStorage.setItem('fontConsent', 'declined');
+      blockAccess();
     }
   });
 })();
