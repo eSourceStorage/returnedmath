@@ -3,7 +3,7 @@
     loadFonts();
     return;
   }
-  if (localStorage.getItem('fontConsent') === 'declined') {
+  if (!localStorage.getItem('fontConsent')) {
     blockAccess();
     return;
   }
@@ -24,7 +24,7 @@
   `;
   banner.innerHTML = `
     This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
-    To remember your choice, we store your consent decision locally in your browser using localStorage.<br>
+    To remember your choices such as liking or disliking, we store your consent decision locally in your browser using localStorage.<br>
     <button id="accept-consent" style="margin-left:10px;padding:5px 10px;">Accept</button>
     <button id="decline-consent" style="margin-left:5px;padding:5px 10px;">Decline</button>
   `;
@@ -92,9 +92,6 @@
     if (e.target.id === 'accept-consent') {
       localStorage.setItem('fontConsent', 'accepted');
       loadFonts();
-    } else if (e.target.id === 'decline-consent') {
-      localStorage.setItem('fontConsent', 'declined');
-      blockAccess();
     }
   });
 })();
