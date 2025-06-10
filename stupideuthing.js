@@ -1,93 +1,100 @@
 (function() {
+  if (localStorage.getItem('fontConsent') === 'accepted') {
+    loadFonts();
+    return;
+  }
+  if (localStorage.getItem('fontConsent') === 'declined') {
+    blockAccess();
+    return;
+  }
+
   // Create banner element
   const banner = document.createElement('div');
   banner.id = 'consent-banner';
   banner.style = `
     position: fixed;
-    bottom: 0; left: 0;
-    width: 100%;
+    bottom: 0; left: 0; right: 0;
     background: #222;
-    color: white;
-    padding: 1rem;
+    color: #fff;
+    padding: 15px;
+    font-family: sans-serif;
+    font-size: 14px;
     text-align: center;
-    z-index: 9999;
+    z-index: 10000;
   `;
   banner.innerHTML = `
-    <p style="margin:0; padding: 0.5rem;">
-      This site uses Google Fonts and Font Awesome which may transfer your IP to US servers. Please accept to continue.
-    </p>
-    <button id="accept-btn" style="margin:0.5rem; padding:0.5rem 1rem;">Accept</button>
-    <button id="decline-btn" style="margin:0.5rem; padding:0.5rem 1rem;">Decline</button>
+    This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
+    To remember your choice, we store your consent decision locally in your browser using localStorage.<br>
+    <button id="accept-consent" style="margin-left:10px;padding:5px 10px;">Accept</button>
+    <button id="decline-consent" style="margin-left:5px;padding:5px 10px;">Decline</button>
   `;
+  document.body.appendChild(banner);
 
-  // Create blocking screen for decline
-  const blockScreen = document.createElement('div');
-  blockScreen.id = 'block-screen';
-  blockScreen.style = `
+  // Create block screen element (hidden by default)
+  const block = document.createElement('div');
+  block.id = 'block-screen';
+  block.style = `
     display: none;
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
     background: black;
     color: white;
-    z-index: 10000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    font-family: sans-serif;
+    font-size: 20px;
     text-align: center;
-    padding: 2rem;
-    flex-direction: column;
+    padding-top: 20vh;
+    z-index: 10001;
   `;
-  blockScreen.innerHTML = `
-    <h1>Access Denied</h1>
-    <p>You declined data consent. This site cannot be used without it.</p>
-  `;
+  block.textContent = 'Access denied: you declined cookie consent.';
+  document.body.appendChild(block);
 
-  // Append banner and block screen to body
-  document.body.appendChild(banner);
-  document.body.appendChild(blockScreen);
+  // Function to load Google Fonts & Font Awesome
+  function loadFonts() {
+    // Google Fonts preconnect
+    const gf1 = document.createElement('link');
+    gf1.rel = 'preconnect';
+    gf1.href = 'https://fonts.googleapis.com';
+    document.head.appendChild(gf1);
 
-  // Load fonts only if accepted
-  function loadExternalFonts() {
-    if (document.getElementById('gf-link')) return; // avoid duplicates
-    const gf = document.createElement('link');
-    gf.id = 'gf-link';
-    gf.rel = 'stylesheet';
-    gf.href = 'https://fonts.googleapis.com/css2?family=Roboto&display=swap';
-    document.head.appendChild(gf);
+    const gf2 = document.createElement('link');
+    gf2.rel = 'preconnect';
+    gf2.href = 'https://fonts.gstatic.com';
+    gf2.crossOrigin = 'anonymous';
+    document.head.appendChild(gf2);
 
+    // Google Fonts stylesheet
+    const gf3 = document.createElement('link');
+    gf3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+    gf3.rel = 'stylesheet';
+    document.head.appendChild(gf3);
+
+    // Font Awesome stylesheet
     const fa = document.createElement('link');
-    fa.id = 'fa-link';
+    fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
     fa.rel = 'stylesheet';
-    fa.href = 'https://use.fontawesome.com/releases/v6.5.0/css/all.css';
     document.head.appendChild(fa);
+
+    // Hide banner and unblock scrolling
+    banner.style.display = 'none';
+    block.style.display = 'none';
+    document.body.style.overflow = '';
   }
 
-  // Accept handler
-  document.addEventListener('click', function(e) {
-    if (e.target.id === 'accept-btn') {
-      localStorage.setItem('fontConsent', 'accepted');
-      banner.style.display = 'none';
-      blockScreen.style.display = 'none';
-      document.body.style.overflow = '';
-      loadExternalFonts();
-    } else if (e.target.id === 'decline-btn') {
-      localStorage.setItem('fontConsent', 'declined');
-      banner.style.display = 'none';
-      blockScreen.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    }
-  });
+  // Function to block access when declined
+  function blockAccess() {
+    banner.style.display = 'none';
+    block.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // prevent scrolling
+  }
 
-  // On load, check consent
-  window.addEventListener('DOMContentLoaded', () => {
-    const consent = localStorage.getItem('fontConsent');
-    if (consent === 'accepted') {
-      banner.style.display = 'none';
-      loadExternalFonts();
-    } else if (consent === 'declined') {
-      banner.style.display = 'none';
-      blockScreen.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
+  // Button click handlers
+  banner.addEventListener('click', function(e) {
+    if (e.target.id === 'accept-consent') {
+      localStorage.setItem('fontConsent', 'accepted');
+      loadFonts();
+    } else if (e.target.id === 'decline-consent') {
+      localStorage.setItem('fontConsent', 'declined');
+      blockAccess();
     }
   });
 })();
