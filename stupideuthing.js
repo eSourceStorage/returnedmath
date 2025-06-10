@@ -93,20 +93,17 @@
 
   // Button click handlers
   banner.addEventListener('click', function(e) {
+    alert(`Clicked button with id: ${e.target.id}`); // DEBUG ALERT
     if (e.target.id === 'accept-consent') {
+      console.log('Accept clicked');
       localStorage.setItem('fontConsent', 'accepted');
       loadFonts();
     }
     if (e.target.id === 'decline-consent') {
+      console.log('Decline clicked');
       localStorage.setItem('fontConsent', 'declined');
-      // Try to close the tab/window
-      window.close();
-      // If window.close() is blocked, fallback to block screen
-      setTimeout(() => {
-        if (!window.closed) {
-          blockAccess();
-        }
-      }, 100);
+      // Immediately block access (instead of trying window.close())
+      blockAccess();
     }
   });
 })();
