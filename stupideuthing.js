@@ -20,7 +20,7 @@
     font-family: sans-serif;
     font-size: 14px;
     text-align: center;
-    z-index: 10000;
+    z-index: 100000000000000000;
   `;
   banner.innerHTML = `
     This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
