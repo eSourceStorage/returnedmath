@@ -85,7 +85,7 @@
     block.style.display = 'none';
     return;
   }
-  // If they explicitly declined (e.g. stored 'declined' or anything else), block access:
+  // If they explicitly declined, block access
   if (localStorage.getItem('fontConsent') === 'declined') {
     blockAccess();
     return;
@@ -99,7 +99,14 @@
     }
     if (e.target.id === 'decline-consent') {
       localStorage.setItem('fontConsent', 'declined');
-      blockAccess();
+      // Try to close the tab/window
+      window.close();
+      // If window.close() is blocked, fallback to block screen
+      setTimeout(() => {
+        if (!window.closed) {
+          blockAccess();
+        }
+      }, 100);
     }
   });
 })();
