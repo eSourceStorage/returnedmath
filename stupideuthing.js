@@ -1,3 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consent Banner Test</title>
+</head>
+<body>
+<script>
 (function() {
   // Create banner element early
   const banner = document.createElement('div');
@@ -11,7 +19,7 @@
     font-family: sans-serif;
     font-size: 14px;
     text-align: center;
-    z-index: 100000000000000000;
+    z-index: 2147483647;
   `;
   banner.innerHTML = `
     This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
@@ -34,7 +42,7 @@
     font-size: 20px;
     text-align: center;
     padding-top: 20vh;
-    z-index: 10001;
+    z-index: 2147483646;
   `;
   block.textContent = 'Access denied: you declined cookie consent.';
   document.body.appendChild(block);
@@ -74,36 +82,39 @@
     document.body.style.overflow = 'hidden'; // prevent scrolling
   }
 
-  // Check consent status AFTER elements exist
-  if (localStorage.getItem('fontConsent') === 'accepted') {
+  // Check consent status and act accordingly
+  const consent = localStorage.getItem('fontConsent');
+  if (consent === 'accepted') {
     loadFonts();
-    return;
-  }
-  if (!localStorage.getItem('fontConsent')) {
-    // Show banner, don't block yet
+  } else if (consent === 'declined') {
+    blockAccess();
+  } else {
     banner.style.display = 'block';
     block.style.display = 'none';
-    return;
-  }
-  // If they explicitly declined, block access
-  if (localStorage.getItem('fontConsent') === 'declined') {
-    blockAccess();
-    return;
   }
 
-  // Button click handlers
+  // Attach event listeners to buttons (delegated)
   banner.addEventListener('click', function(e) {
-    alert(`Clicked button with id: ${e.target.id}`); // DEBUG ALERT
     if (e.target.id === 'accept-consent') {
-      console.log('Accept clicked');
       localStorage.setItem('fontConsent', 'accepted');
       loadFonts();
     }
     if (e.target.id === 'decline-consent') {
-      console.log('Decline clicked');
       localStorage.setItem('fontConsent', 'declined');
-      // Immediately block access (instead of trying window.close())
-      blockAccess();
+      // Try to close tab or fallback to block screen
+      try {
+        window.open('', '_self').close();
+      } catch {
+        blockAccess();
+      }
+      setTimeout(() => {
+        if (!window.closed) {
+          blockAccess();
+        }
+      }, 200);
     }
   });
 })();
+</script>
+</body>
+</html>
