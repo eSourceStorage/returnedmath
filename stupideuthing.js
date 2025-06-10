@@ -1,36 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Consent Banner Test</title>
-</head>
-<body>
-<script>
 (function() {
   // Create banner element early
-  const banner = document.createElement('div');
-  banner.id = 'consent-banner';
-  banner.style = `
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: #222;
-    color: #fff;
-    padding: 15px;
-    font-family: sans-serif;
-    font-size: 14px;
-    text-align: center;
-    z-index: 2147483647;
-  `;
-  banner.innerHTML = `
-    This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
-    To remember your choices such as liking or disliking, we store your consent decision locally in your browser using localStorage.<br>
-    <button id="accept-consent" style="margin-left:10px;padding:5px 10px;">Accept</button>
-    <button id="decline-consent" style="margin-left:5px;padding:5px 10px;">Decline</button>
-  `;
-  document.body.appendChild(banner);
-
-  // Create block screen element (hidden by default)
-  const block = document.createElement('div');
+    const block = document.createElement('div');
   block.id = 'block-screen';
   block.style = `
     display: none;
@@ -75,6 +45,8 @@
     document.body.style.overflow = '';
   }
 
+ document.body.appendChild(banner);
+
   // Function to block access when declined
   function blockAccess() {
     banner.style.display = 'none';
@@ -86,21 +58,29 @@
   const consent = localStorage.getItem('fontConsent');
   if (consent === 'accepted') {
     loadFonts();
-  } else if (consent === 'declined') {
-    blockAccess();
   } else {
     banner.style.display = 'block';
     block.style.display = 'none';
   }
-
-  // Attach event listeners to buttons (delegated)
-  banner.addEventListener('click', function(e) {
-    if (e.target.id === 'accept-consent') {
-      localStorage.setItem('fontConsent', 'accepted');
-      loadFonts();
-    }
-    if (e.target.id === 'decline-consent') {
-      localStorage.setItem('fontConsent', 'declined');
+  const banner = document.createElement('div');
+  banner.id = 'consent-banner';
+  banner.style = `
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: #222;
+    color: #fff;
+    padding: 15px;
+    font-family: sans-serif;
+    font-size: 14px;
+    text-align: center;
+    z-index: 2147483647;
+  `;
+  banner.innerHTML = `
+    This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
+    To remember your choices such as liking or disliking, we store your consent decision locally in your browser using localStorage.<br>
+    <button onclick="      localStorage.setItem('fontConsent', 'accepted');
+      loadFonts();" class style="margin-left:10px;padding:5px 10px;">Accept</button>
+    <button onclick="     localStorage.setItem('fontConsent', 'declined');
       // Try to close tab or fallback to block screen
       try {
         window.open('', '_self').close();
@@ -111,10 +91,8 @@
         if (!window.closed) {
           blockAccess();
         }
-      }, 200);
-    }
-  });
-})();
+      }, 200);" style="margin-left:5px;padding:5px 10px;">Decline</button>
+  `;
+ 
+
 </script>
-</body>
-</html>
