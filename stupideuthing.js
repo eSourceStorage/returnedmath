@@ -1,5 +1,4 @@
 (function() {
-  // Create the block screen element (hidden initially)
   const block = document.createElement('div');
   block.id = 'block-screen';
   block.style = `
@@ -17,7 +16,6 @@
   block.textContent = 'Access denied: you declined cookie consent.';
   document.body.appendChild(block);
 
-  // Create the consent banner element
   const banner = document.createElement('div');
   banner.id = 'consent-banner';
   banner.style = `
@@ -31,15 +29,21 @@
     text-align: center;
     z-index: 2147483647;
   `;
+
+  // Add buttons and text inside banner
   banner.innerHTML = `
     This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
-    To remember your choices such as liking or disliking, we store your consent decision locally in your browser using localStorage.<br>
+    To remember your choices, we store your consent decision locally in your browser using localStorage.<br>
     <button id="accept-btn" style="margin-left:10px;padding:5px 10px;">Accept</button>
     <button id="decline-btn" style="margin-left:5px;padding:5px 10px;">Decline</button>
   `;
+
   document.body.appendChild(banner);
 
-  // Function to load Google Fonts & Font Awesome
+  // Now that banner and buttons are in DOM, get buttons by ID
+  const acceptBtn = document.getElementById('accept-btn');
+  const declineBtn = document.getElementById('decline-btn');
+
   function loadFonts() {
     const gf1 = document.createElement('link');
     gf1.rel = 'preconnect';
@@ -67,20 +71,19 @@
     document.body.style.overflow = '';
   }
 
-  // Function to block access when declined
   function blockAccess() {
     banner.style.display = 'none';
     block.style.display = 'block';
     document.body.style.overflow = 'hidden'; // prevent scrolling
   }
 
-  // Button event handlers
-  document.getElementById('accept-btn').addEventListener('click', () => {
+  // Attach event listeners
+  acceptBtn.addEventListener('click', () => {
     localStorage.setItem('fontConsent', 'accepted');
     loadFonts();
   });
 
-  document.getElementById('decline-btn').addEventListener('click', () => {
+  declineBtn.addEventListener('click', () => {
     localStorage.setItem('fontConsent', 'declined');
     try {
       window.open('', '_self').close();
@@ -94,7 +97,7 @@
     }, 200);
   });
 
-  // Check consent status and show/hide banner or block screen accordingly
+  // On load, check consent status
   const consent = localStorage.getItem('fontConsent');
   if (consent === 'accepted') {
     loadFonts();
