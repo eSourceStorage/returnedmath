@@ -32,7 +32,6 @@
     blockContent.innerHTML = 'Access denied: you declined cookie consent.';
 
     const blockBanner = document.createElement('div');
-    blockBanner.style.display = 'none';
     blockBanner.innerHTML = `
       <div style="margin-bottom: 20px; color: ${theme.colors.text}">
         This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
