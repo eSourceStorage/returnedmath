@@ -21,8 +21,7 @@
             display: 'none',
             position: 'fixed',
             top: '0', left: '0', right: '0', bottom: '0',
-            color: theme.colors.text,  // Ensure text is visible
-            background: '#fff',         // White background
+            background: '#fff',        
             fontFamily: theme.fonts.system,
             fontSize: '20px',
             textAlign: 'center',
