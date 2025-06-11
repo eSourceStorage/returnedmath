@@ -255,8 +255,10 @@
       blockButtons, blockContent
     } = elements;
 
+    // Hide banner initially
+    banner.style.display = 'none';
+
     function handleConsent(accepted) {
-      // Save to localStorage
       localStorage.setItem('fontConsent', accepted ? 'accepted' : 'declined');
       banner.style.display = 'none';
       
@@ -268,6 +270,17 @@
         blockContent.innerHTML = '<div>Access denied: you declined cookie consent.</div>';
         blockContent.appendChild(changeMindBtn);
       }
+    }
+
+    // Initial state check
+    const consent = localStorage.getItem('fontConsent');
+    if (consent === 'accepted') {
+      loadFonts();
+      // Don't show anything when accepted
+    } else if (consent === 'declined') {
+      handleConsent(false);
+    } else {
+      banner.style.display = 'block';
     }
 
     function showConsentOptions() {
@@ -288,16 +301,6 @@
     acceptBtn.addEventListener('click', () => handleConsent(true));
     declineBtn.addEventListener('click', () => handleConsent(false));
     manageBtn.addEventListener('click', () => banner.style.display = 'block');
-
-    // Initial state check
-    const consent = localStorage.getItem('fontConsent');
-    if (consent === 'accepted') {
-      loadFonts();
-    } else if (consent === 'declined') {
-      handleConsent(false);
-    } else {
-      banner.style.display = 'block';
-    }
   }
 
   if (document.readyState === 'loading') {
