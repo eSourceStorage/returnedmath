@@ -141,7 +141,7 @@
     const banner = document.createElement('div');
     banner.id = 'cookie-consent-banner';
     Object.assign(banner.style, {
-      display: 'block',  // Changed from 'none' to 'block'
+      display: 'none',  // Changed to 'none' by default
       position: 'fixed',
       bottom: '0',
       left: '0',
@@ -255,9 +255,6 @@
       blockButtons, blockContent
     } = elements;
 
-    // Hide banner initially
-    banner.style.display = 'none';
-
     function handleConsent(accepted) {
       localStorage.setItem('fontConsent', accepted ? 'accepted' : 'declined');
       banner.style.display = 'none';
@@ -269,6 +266,7 @@
         block.style.display = 'block';
         blockContent.innerHTML = '<div>Access denied: you declined cookie consent.</div>';
         blockContent.appendChild(changeMindBtn);
+        changeMindBtn.style.display = 'block';  // Make sure button is visible
       }
     }
 
@@ -276,11 +274,10 @@
     const consent = localStorage.getItem('fontConsent');
     if (consent === 'accepted') {
       loadFonts();
-      // Don't show anything when accepted
     } else if (consent === 'declined') {
       handleConsent(false);
     } else {
-      banner.style.display = 'block';
+      banner.style.display = 'block';  // Only show banner if no decision made
     }
 
     function showConsentOptions() {
