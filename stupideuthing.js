@@ -105,17 +105,7 @@
 
   // Decline button handler
   declineBtn.addEventListener('click', () => {
-    localStorage.setItem('fontConsent', 'declined');
-    try {
-      window.open('', '_self').close();
-    } catch {
-      blockAccess();
-    }
-    setTimeout(() => {
-      if (!window.closed) {
-        blockAccess();
-      }
-    }, 200);
+    window.location.href = "about:blank"
   });
 
   // On load, check consent status
