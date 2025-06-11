@@ -123,7 +123,30 @@
     }
 
     function loadFonts() {
-        // ...existing loadFonts code...
+        const gf1 = document.createElement('link');
+        gf1.rel = 'preconnect';
+        gf1.href = 'https://fonts.googleapis.com';
+        document.head.appendChild(gf1);
+
+        const gf2 = document.createElement('link');
+gf2.rel = 'preconnect';
+gf2.href = 'https://fonts.gstatic.com';
+gf2.crossOrigin = 'anonymous';
+document.head.appendChild(gf2);
+
+const gf3 = document.createElement('link');
+gf3.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
+gf3.rel = 'stylesheet';
+document.head.appendChild(gf3);
+
+const fa = document.createElement('link');
+fa.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+fa.rel = 'stylesheet';
+document.head.appendChild(fa);
+
+banner.style.display = 'none';
+block.style.display = 'none';
+document.body.style.overflow = '';
     }
 
     function init() {
