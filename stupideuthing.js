@@ -5,7 +5,7 @@
             secondary: '#6c757d',
             background: '#ffffff',
             surface: '#f8f9fa',
-            text: '#212529',
+            text: '#252424',
             border: '#dee2e6'
         },
         fonts: {
