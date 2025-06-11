@@ -1,4 +1,4 @@
-// Theme configuration
+
 (function() {
     const theme = {
         colors: {
