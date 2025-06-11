@@ -95,7 +95,7 @@
       marginTop: '20vh'
     });
     
-    blockContent.innerHTML = 'Access denied: you declined cookie consent.';
+    blockContent.innerHTML = '<div>Access denied: you declined cookie consent.</div>';
 
     const changeMindBtn = document.createElement('button');
     changeMindBtn.textContent = 'Change My Mind';
@@ -135,6 +135,7 @@
     blockButtons.append(blockAcceptBtn, blockDeclineBtn);
     blockContent.appendChild(blockButtons);
 
+    blockContent.appendChild(changeMindBtn);
     block.appendChild(blockContent);
 
     const banner = document.createElement('div');
@@ -254,61 +255,48 @@
       blockButtons, blockContent
     } = elements;
 
-    function showBanner() {
-      banner.style.display = 'block';
-      block.style.display = 'none';
-      document.body.style.overflow = '';
+    function handleConsent(accepted) {
+      // Save to localStorage
+      localStorage.setItem('fontConsent', accepted ? 'accepted' : 'declined');
+      banner.style.display = 'none';
+      
+      if (accepted) {
+        loadFonts();
+        block.style.display = 'none';
+      } else {
+        block.style.display = 'block';
+        blockContent.innerHTML = '<div>Access denied: you declined cookie consent.</div>';
+        blockContent.appendChild(changeMindBtn);
+      }
     }
 
-    function showBlockConsent() {
+    function showConsentOptions() {
       blockContent.innerHTML = `
         <div style="margin-bottom: ${theme.spacing.lg}; color: ${theme.colors.text.primary}">
           This site uses Google Fonts and Font Awesome, which may transfer your data to the US.<br>
           To remember your choices, we store your consent decision in localStorage.
         </div>
       `;
-      blockContent.appendChild(blockButtons);
       blockButtons.style.display = 'flex';
-      changeMindBtn.style.display = 'none';
+      blockContent.appendChild(blockButtons);
     }
 
-    changeMindBtn.addEventListener('click', showBlockConsent);
+    // Event Listeners
+    changeMindBtn.addEventListener('click', showConsentOptions);
     blockAcceptBtn.addEventListener('click', () => handleConsent(true));
     blockDeclineBtn.addEventListener('click', () => handleConsent(false));
     acceptBtn.addEventListener('click', () => handleConsent(true));
     declineBtn.addEventListener('click', () => handleConsent(false));
-    manageBtn.addEventListener('click', showBanner);
+    manageBtn.addEventListener('click', () => banner.style.display = 'block');
 
-    function handleConsent(accepted) {
-      localStorage.setItem('fontConsent', accepted ? 'accepted' : 'declined');
-      banner.style.display = 'none';
-      block.style.display = 'none';
-
-      if (accepted) {
-        loadFonts();
-        document.body.style.overflow = '';
-      } else {
-        block.style.display = 'block';
-        document.body.style.overflow = 'hidden';
-
-        Array.from(block.children).forEach(child => {
-          child.style.display =
-            (child.tagName === 'DIV' && child.innerHTML.includes('Access denied')) ||
-            (child.tagName === 'BUTTON' && child.textContent === 'Change My Mind')
-              ? 'block'
-              : 'none';
-        });
-      }
-    }
-
+    // Initial state check
     const consent = localStorage.getItem('fontConsent');
     if (consent === 'accepted') {
       loadFonts();
     } else if (consent === 'declined') {
-      block.style.display = 'block';
-      document.body.style.overflow = 'hidden';
+      handleConsent(false);
     } else {
-      showBanner();
+      banner.style.display = 'block';
     }
   }
 
